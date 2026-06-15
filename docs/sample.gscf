@@ -1,0 +1,41 @@
+#  sample.gscf
+#  This is a sample of a gnuscope configuration file
+#  At the current time this is an experimental feature
+#  To use this feature rename this file
+#  to .gnuscopeconfig in your home directory
+#  or in the directory you analise your data from.
+# 
+#  When looking for a configuration file,
+#  Gnuscope will first look in the local directory,
+#  then your home directory, and finally assume
+#  there are no configuration files and assume you want the
+#  defaults.
+
+#  You can set gnuscope to automatically load a particular
+#  file on startup (which can be a command file) using
+#  ----> in <filename> <----
+
+#  You can start gnuscope with the two dimensional
+#  interpolation set to a particular polynomial
+#  The default is 2.
+#  ----> Set2DPoly <degree> <----
+
+#  You can start gnuscope with the automatic y-scale matching
+#  for overlayed mode either on or off
+#  ----> OverlayYScaleMode <on/off> <----
+
+#  You can specify the mode of display for the two dimensional
+#  plotting
+#  for color vs black and white
+#  ----> DensityPlotColors <Color/BW> <----
+#  for density vs contour plot
+#  ----> DensityPlotType <Density/Contour/DensityAndContour> <----
+#  for the type of contours
+#  ----> ContourMode <Linear/Log/Root/InverseLog/InverseRoot> <----
+#  for the number of contours for contour mode
+#  ----> NumContours <num> <----
+#  For interpolationmode
+#  ----> DensityPlotInterpolationMode <Off/0/1/2/3/4/5/6/7/8/9/10> <----
+
+#  For the specification of the 1D plots
+#  ----> DisplayMode <Linear/Log/Root/EffCor> <----

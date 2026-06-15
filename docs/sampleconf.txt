@@ -1,0 +1,56 @@
+# This is a sample configuration file for use with gnuscope
+#
+# For general use copy it to .gnuscopeconfig in your
+# home directory.
+# For use in a specific directory copy it to .gnuscopeconfig
+# in that directory
+#
+# To input files
+# in <filename>
+#
+# To set the interpolation mode for 2D plots
+# 0 = off
+# 2 = default
+# Set2DPoly <mode>
+#
+# To set the colordepth for density plots
+# Set2DColorDepth <number of colors>
+#
+# To set the vertical scaling mode for overlayed plots
+# 0 = Overlayed plots all use the same scale
+# 1 = Overlayed plots take up the same amount of space (default)
+# OverlayYScaleMode <mode>
+#
+# To set color or black and white mode for density plots
+# DensityPlotColors Color
+# DensityPlotColors BW
+#
+# To display 2D plots as density, contour, or both
+# DensityPlotType DensityAndContor
+# DensityPlotType Density
+# DensityPlotType Contour
+#
+# To set the way colors and contours are placed on 2D plots
+# ContourMode Linear
+# ContourMode Log
+# ContourMode Root
+# ContourMode InverseLog
+# ContourMode InverseRoot
+#
+# To set the number of contours displayed on 2D plots
+# NumContours <num>
+#
+# To set the colors of the lines for overlayed plots
+# linenum = 0 (first line), 1 (second line)...
+# color can be any string defined color.  ex. red, blue, green
+# LineColor <linenum> <color>
+#
+# To set the mode of the vertical scale for 1D histograms
+# DisplayMode Linear
+# DisplayMode Log
+# DisplayMode Root
+# DisplayMode EffCor
+#
+# To set the path for gnuscopemanual.pdf
+# This document is opened when the help menu is called
+ManualPath /home/pavan/gnuscope/docs/gnuscopemanual.pdf

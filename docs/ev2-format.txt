@@ -1,0 +1,16 @@
+The REAL format for ev2 files... from John Pavan's compress2.c
+
+/* --- format of an .ev2 file --- */
+ 
+/* an .ev2 file follows the following format
+ * (1byte) ADC's Fired
+ * (1byte) ADC Label 1
+ * (2bytes) ADC Channel 1
+ * (1byte) ADC Label 2
+ * (2bytes) ADC Channel 2
+ * and so on
+ * (1byte) echo ADCs Fired (for checking)
+ * next event
+ */
+ 
+

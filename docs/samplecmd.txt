@@ -1,0 +1,98 @@
+// Go figure comments are defined by // instead of # in these files
+// 
+// Anyway this is a generic command file for use with gnuscope
+// there should be descriptions and such of each of the functions
+//
+// To read files
+// in <filename>
+//
+// To set calibrations
+// histogram = histogram to set the calibration for
+// a,b,c are the constant, linear, and quadratic coefficients
+// cal <histogram> <a> <b> <c>
+//
+// To set a marker at channel <a>
+// mark <a>
+//
+// To set the background at <a> counts per channel
+// background <a>
+//
+// To perform a single gaussian fit from 
+// channel <a> to channel <b> with <background>
+// gauss <a> <b> <background>
+//
+// To perform a double gaussian fit
+// from channel <a> to channel <b> with <background>
+// and approximate peak possitions at <c> and <d>
+// and approximate widths of <e> and <f>
+// doublegauss <a> <b> <c> <d> <e> <f> <background>
+//
+// to perform a single gaussian fit with fixed FWHM
+// fixedFWHMgauss <minchan> <maxchan> <FWHM> <background>
+//
+// Exponential fit 
+// exponential fit [expfit <minchan> <maxchan>]
+//
+// --- Sorting ---
+//
+// Sorting takes quite a few commands
+// sort clear
+// clears all the sorting options
+//
+// sort output tac
+// turns on output for the tac signals, turns off histogram output
+//
+// sort output histogram
+// turns on energy histogram output, turns off tac output
+//
+// sort output part <zoom>
+// turns on 2D particle histogram output
+// optionally sets the zoom factor to <zoom>
+//
+// sort output twd
+// turns on gamma-gamma matrix output, 
+// turns off all other matrix output
+//
+// sort output ggsqr <filename>
+// turns on square sort output with an axisfile of <filename>
+// turns off all other matrix output
+//
+// sort output pgsqr <part fincal>
+// turns on particle-gamma square sorting
+// sets the final calibration of 
+// particle energys to <part fincal>
+// turns off all other matrix output
+//
+// sort output pairsqr <filename>
+// turns on pair-square output using <filename> to identify pairs
+// turns off all other matrix output
+//
+// sort gate tac
+// turns on tac gating
+//
+// sort gate part <opt filename>
+// Turns on particle gating from memory or filename
+//
+// sort gate gamma <min> <max>
+// turns on gamma gating from <min> to <max>
+//
+// sort gate gamma <filename>
+// turns on gamma gating with gates identified in <filename>
+//
+// sort gate veto <filename>
+// turns on veto of all events defined in <filename>
+//
+// sort gate requires <filename>
+// turns on requirment that all events 
+// meet conditions in <filename>
+//
+// sort gate selfsuppressclovers
+// turns on clover self-suppresion
+//
+// sort gate minmultiplicity <min>
+// rejects events without at least <min> events in a clover
+//
+// sort sort
+// starts the sorting
+//
+// --- the end --- 

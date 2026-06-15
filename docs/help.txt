@@ -1,0 +1,552 @@
+                         --- Gnuscope --- 
+                         version: Beta 1.0
+
+ I.  Gnuscope (beta 1.0) is the latest evolution of the programs based on 
+ scope fit which has been maintained and enhanced by Sam Tabor and his
+ graduate students.  Gnuscope was written and is currently maintained
+ by John Pavan (pavan@nucmar.physics.fsu.edu).  Since this is the beta
+ version, bugs need to be found and some features may need to be added.  
+ Future plans include:
+
+  * integrated lineshape fitting (unlikely until we do some more DSAM
+    lifetime measurements).
+
+  * Printing support (via Postscript).
+
+ Currently, Gnuscope can perform most functions supported by both the
+ gs92 and pgamsort versions of scope fit.
+
+ II. Changes from prior flavors of Scope Fit:
+
+     Unlike other versions of scope fit, Gnuscope can read other file
+ formats.  To maintain compatablility with prior versions of scope fit
+ the default file format is binary NSM.  Other file formats can be
+ selected in the "File:Type" menu.  The current version of Gnuscope
+ does not automatically detect the file type of histogram data.
+ Additionally, if histograms are currently in memory and another file
+ is read, the program will prompt the user to keep the current
+ histograms.  If the current histgrams are retained, the new histograms
+ are written after the old histograms so that all are retained in
+ memory.  Finally, the "Lipha dump" option has been moved to the "File"
+ menu and will prompt the user for the file name to write.
+
+      Gnuscope is also capable of reading in and projecting from both
+ triangle and square arrays in the .twd and .sqr formats.  To prevent
+ confusion (mostly on my part) only one triangle or square array can be
+ in memory at one time.  Tools for reading, writing, and manipulating
+ these data structures are located under the project menu and can be 
+ accessed by pressing "P".  While it is currently untested, the 
+ algorythms for manipulating these structures should be compatable with
+ all .twd and .sqr files which are based on an integer "square" matrix
+ (same number of channels on x and y).  
+
+        The functions in the "Analysis" and "Display" menus are strongly
+ correlated with the related functions from scope fit.  However, there
+ are several notable variations which should improve the "feel" of the
+ program.  First, when the mouse is clicked on the active histogram, it
+ sets the marker and returns channel information (including calibration
+ if it is entered).  Gnuscope tracks four markers and will re-display
+ them whenever a new marker is set and under other specific
+ circumstances.  Second, double gauss fit (DGF), no longer prompts for
+ the estimated centroids after it is called.  Instead, DGF expects the
+ four markers to denote the region to fit and the estimated centroids
+ for both peaks.  Finally, the log-plot and root-plot functions which
+ used to manipulate the histograms directly now are display options
+ which only affect the display mode while leaving the histograms alone. 
+
+       The functions in "Manipulate" differ slightly from previous versions
+ of scope fit, due to the more sophisticated approach to memory
+ management used in Gnuscope.  A major addition is the "clear" function
+ which will delete a histogram from memory without affecting the other
+ histograms.
+
+ 	Additionally, some accelerator keys have been re-mapped as is 
+ detailed below.
+
+ III.  Functionality:
+
+       Of course we need to know what we are doing, so here is a brief
+ discussion of what each menu option and keyboard command does.  We
+ will begin with key strokes which are not coupled to menu functions.
+
+ A.  The Numeric Keypad:
+
+ 7 (home) - scale up
+ 1 (end) - scale down
+ 
+ scale up (down) - multiply (divide) max counts by x+1 where was the
+ previous multiplication (division) factor.  This factor starts at
+ zero.
+
+ 4 (left arrow) - shift left
+ 6 (right arrow) - shift right
+
+ shift left (right) - shifts the portion of the histogram which is
+ displayed by one half its range to the left (right).
+
+ 8 (up arrow) - prev spectrum
+ 2 (down arrow) - next spectrum
+
+ prev. (next) spectrum - when more than one spectrum is in memory
+ display the previous (next) spectrum.  In the case of multiple
+ displays, only the top histogram is changed, and the active histogram
+ is set to the new histogram.
+
+ 9 (page up) - histogram up
+ 3 (page down) - histogram down
+
+ histogram up (down) - In multi-display mode change the currently
+ active histogram to one up (down) from the current. The active histogram
+ can also be changed by clicking on the histogram you desire to be active.
+
+ B.  The File Menu:
+
+ Read - Reads in a histogram file of the type designated by the type
+ buttons (see below).  
+
+ Write - Writes a histogram file of the type designated by the type 
+ buttons (see below).  
+
+ Write Lipha - Writes a.dat file for Lipha using the currently 
+ displayed histogram and region.  
+
+ eXit - Exits the program.  
+
+ Type - Brings up a sub-menu which allows the user to select the type 
+ of histogram file.  Currently the choices are: 
+    1: Binary .spk for ORNL software 
+    2: Binary .nsm for offline scope fit type programs 
+    3: ASCII  equivalent to Radware .spe files 
+    4: ASCII .nsm for online scope fit type programs 
+    5: general ASCII why not
+
+ C.  Manipulate Menu:
+
+ Add - Sum two histograms (a + b = c) 
+
+ Compress - Compress a histogram by an integer factor 
+
+ Gainshift - Change from one calibration to another 
+
+ Move - Moves a histogram from histogram location a to b
+
+ Normalize - Multiply every channel in a histogram by a number 
+
+ Subtract - Subtract two histograms (a - b + constant = c) 
+
+ Title - Set the title of a histogram.  Should work for up to 40 characters 
+
+ Clear - Delete a histogram from memory.
+
+ D.  Display Menu:
+
+ Display - Lists the avalible histograms and prompts the user which to 
+ display.  Multiple spectra can be selected.  The first four will be
+ displayed vertically, the fifth to the eighth will be displayed in
+ a second column, ninth to the twelfth in a third column, and thirteenth
+ to sixteenth will be displayed in a forth column.
+
+ Display Same Range - Exactly the same as Display, but without changing
+ the range of channels which is displayed.
+
+ Calibration - Sets the global and/or local calibrations.
+ Local calibrations override global calibrations automatically.  
+
+ Type - Sets the display type.  Choices are linear, log, and root.  
+
+ Mark - Sets a mark manually 
+
+ Expand - Expands the region between the two most recent markers.  
+
+ Manual Expand - Prompts the user for a region to expand.  
+
+ Slide Right - Shifts the current spectrum to the right by one
+ half the current range.  
+
+ Slide Left - Shifts the current spectrum to the left by one 
+ half the current range.  
+
+ Next Spectrum - If more than one histogram is in memory, displays 
+ the next histogram.  
+
+ Prev Spectrum - If more than one histogram is in memory, displays 
+ the previous histogram.  
+
+ Range - Set the y-scale in three ways.  
+      1.  Fix the y-max to a certain number.  
+      2.  Multiply the y-max by x+1 where x is the previous 
+	  factor used.  
+      3.  Divide the y-max by x+1 where x is
+	  the previous factor used.  
+
+ Zoom Out - Display the entire histogram
+
+ Redraw - Redraw the current range of the current histogram 
+
+ Active Spectrum Up - If more than one histogram is displayed, 
+ changes the active histogram to the one above the currently active one.  
+
+ Active Spectrum Down - If more than one histogram is displayed, 
+ changes the active histogram to the one bellow the currently active on.
+
+ E: Analysis
+
+ Gaussian - Perform a least-squares gaussian fit for the data between
+ the two most recent markers using the current value for the
+ background.  
+
+ Double Gaussian - Perform a least-squares double gaussian
+ fit assuming that the four most recent markers represent (not
+ nessasarially in any order) the first channel to consider, the last
+ channel to consider, the expected centroid for the first gaussian, and
+ the expected centroid for the second gaussian.  This function also
+ assumes that the background is set appropriately, and will prompt the
+ user for the approximate FWHM of each gaussian.  If the approximate
+ FWHMs inputed by the user are the same, the program will assume it
+ should vary them together.  
+
+ Fixed FWHM Gaussian - Same as Gaussian,
+ but prompts the user for the FWHM of the peak, and does not vary that.
+
+ Sum - Returns the number of counts between the two most recent
+ markers, a statisitically derived center value, and the standard
+ deviation of the region from that center value.  The later two numbers
+ depend on the background being set appropriately.  
+
+ Background - Sets the background by averaging the number of counts 
+ between the two most recent markers.  
+
+ Manual Set Background - Prompts the user for a value
+ for the background.  
+
+ One Channel Set Background - Sets the background to the number 
+ of counts corresponding to the channel of most recent
+ marker.  
+
+ Background Poly - Sets the polynomial degree of the
+ background fit.  Currently only a polynomial degree of zero is
+ allowed.
+
+ F: GS92
+
+ Read .twd or .sqr - Reads a .twd or .sqr file into memory.  Only one
+ can be in memory at a time.  Gnuscope assumes an equal number of
+ channels on each side of the matrix.  If this is not the case (as with
+ .sqr's and .twd's from pgam sort) the project functions will fail.
+ Gnuscope also determines the type of file from the extention, so
+ expect it to dump if you try to do anything with a file mislabeled as
+ a .sqr or .twd.  
+
+ Write .twd or .sqr - Writes the current .twd or .sqr file to disk.  
+
+ Sort Setup - Sets up the parameters to sort GS92 data
+ from disk.  
+
+ Sort - Sorts from disk assuming GS92 data is stored in /gamma1/ 
+
+ Gate files may be required depending on the types of sorting which you do
+ with GS92 sort.  The two types are as follows.
+
+  F.1. Detector Axis Setup File
+
+  2                       <- Final compression = 2/3 keV/chan * this number
+  10                      <- Number of Detectors on X axis
+  95 97 98 99 100 101     <- List of detectors on X axis
+  102 103 104 106
+  110                     <- Number of Detectors on Y axis
+  1 2 3 4 5  6 7 8 9 10   <- List of detectors on Y axis
+  11 12 13 14 15 16 17 18 19 20   
+  21 22 23 24 25 26 27 28 29 30 
+  31 32 33 34 35 36 37 38 39 40
+  41 42 43 44 45 46 47 48 49 50 
+  51 52 53 54 55 56 57 58 59 60
+  61 62 63 64 65 66 67 68 69 70 
+  71 72 73 74 75 76 77 78 79 80
+  81 82 83 84 85 86 87 88 89 90 
+  91 92 93 94 95 96 97 98 99 100
+  101 102 103 104 105 106 107 108 109 110
+
+  Note that comments can be made after the content, and that the sorting
+  program will skip all x = y cases.
+
+  F.2.  Gamma Gate Setup File
+
+  1  251   255    169   <- Add or Subtract, Lower, Upper channels, E-gamma
+  1  296   302    200
+  1  391   397    263
+  1  398   404    267
+  1  443   455    298
+  1  465   476    314
+  1  484   490    324
+  1  495   505    334
+  1  551   558    370
+  1  649   657    435
+  1  667   673    447
+  1  681   692    458
+  1  753   762    506
+  1  868   879    583
+  1  953   963    637
+  1 1006  1016    675
+  1 1140  1150    764
+  1 1204  1214    808
+  1 1349  1358    903
+  1 1363  1370    912
+  1 1483  1491    992
+  1 1960  1970   1310
+  1 2233  2245   1492
+  0 0 0                 <- terminating line for Fortran compatability
+
+  Please note that the add or subtract is determined by a 1 or a -1 in the 
+  first column of a line.  The lower and upper channels for the gate are 
+  in uncompressed channels, and the E-gamma is only a note for the user.
+
+  
+ G: Fits
+
+ List - lists the channel information between the two most recent markers.
+
+ H: PGAM
+
+ Read Big - reads in an E vs. dE 2D histogram from file.
+
+ Write Big - writes the current E vs. dE 2D histogram from memory to a file.
+
+ Display Big - displays the E vs. dE 2D histogram which is currently in 
+ memory.
+
+ Read Pgam Matrix - reads a .twd or .sqr file for use with pgamsort 
+ functions.  These files differ from those used with the gs92 functions
+ because they contain floating point values instead of short ints.
+ therefore files generated via a gs92 sort cannot be opened by these
+ functions, and matrices generated via the PGAM version of sort cannot
+ be read by the gs92 functions.
+
+ Write Pgam Matrix - writes a .twd or .sqr file.
+
+ Check Setup File - attempts to read a setup file for a PGAM sort.  A setup
+ file cannot be used in a sort by inputing it this way.  A "master" setup
+ file must be used as well.  This function is retained to allow the user
+ to verify that the information in a particular setup file is correct.
+ A setup file has information in the following format:
+
+ 3000                     <- number of channels in the final histograms
+ 2,0.0215                 <- final calibration,approximate beta
+ 8				  <- number of ADCs in use
+ Clover2Red               <- title of the first detector
+ 1,8192,95.0              <- ADC#,channels in the ADC,Angle from beam
+ 0.247552583,0.754602511,-0.00000632437939  <- calibration (A + B*x + C*x^2)
+ Clover2Green             <- again for the next detector
+ 2,8192,95.0
+ 1.89401236,0.758848974,-0.00000662251349
+ Clover2Blue              <- again for the next detector
+ 3,8192,85.0
+ 3.35875621,0.760095390,-0.00000710987492
+ Clover2Black             <- you should be getting the idea
+ 4,8192,85.0
+ 0.490738139,0.764357242,-0.00000792681720
+ E                        <- The same for the E detector
+ 9,8192,0.0               <- note that the ADC#'s don't have to be contigous
+ 0,0.8,0
+ DeltaE                   <- Same for the Delta E
+ 10,8192,0.0
+ 0,2.1,0
+ TAC                      <- same for the TAC
+ 11,8192,0.0
+ 0,1,0
+ FSU3                     <- same for this single crystal HPGE
+ 12,8192,142.0
+ 1.44120743,0.778687355,-0.00000620002374
+ 1                        <- number of E - dE telescopes
+ e                        <- title for the total energy output
+ 9,10,0.23,25             <- E's ADC#, dE's ADC#,relative gain,"ADC#" for 
+						total energy output.
+ 1                        <- number of multicrystal HPGEs
+ clover2                  <- title of the first multicrystal HPGE
+ 4,26                     <- number of crystals, "ADC#" for addback output
+ 1,2,3,4                  <- adcs of the crystals
+ 1                        <- number of TACs
+ TAC                      <- title of the first TAC
+ 11                       <- ADC# of the first TAC
+ 1                        <- number of detectors monitored by the TAC
+ 12,900,1200              <- ADC# of monitored detector,min,max accepted 
+                                 channels for TAC gating
+
+ Read Master Setup - reads a master setup file.  A master setup file has
+ information in the following format:
+
+ /gamma3/cooper/               <- directory where .evt files are located
+ 1                             <- number of setup files to use
+ 97,98                         <- first and last run to use the first setup
+ setup1                        <- name of the first setup file
+
+ Sort - brings up the PGAM sort interface.
+
+ There are two additional input files which can be used during a PGAM sort.
+
+  H.1.  Detector Setup File
+
+  When sorting an unsymeterized gamma - gamma matrix one probably wants 
+  different detectors on each axis.  The detector setup file can be entered
+  in the sort dialog to accomplish this.
+
+  21                          <- Number of detectors on the X axis
+  1 2 3 4 5 6 7 8             <- List of detectors on the X axis
+  11 12 13 14 15 16 17 18 19
+  20 21 23 24
+  21                          <- Number of detectors on the Y axis
+  1 2 3 4 5 6 7 8             <- List of detectors on the Y axis
+  11 12 13 14 15 16 17 18 19
+  20 21 23 24
+
+  Please note that comments can be made after the appropriate information,
+  and that only 10 entries per line can be made when listing the detectors.
+
+  The program will also accept all detectors if this file is not provided.  
+  X = Y cases are also ignored.
+
+  H.2.  Gamma Gate File
+
+  In the case that you want to use a gamma gate during a sort (to make say, 
+  a gamma gated E - dE histogram), either a single range can be entered
+  in the PGAM sort window, or a Gamma Gate File can be used.
+
+  The format of a Gamma Gate file is as follows.
+
+  2            <- number of gates
+  1098 1128    <- range to accept (in keV)
+  1760 1790 
+
+  You can make comments after the appropriate information.  Floating point
+  energies can be accepted.
+
+ I: Project
+
+ Project - brings up the project interface.
+
+ J: Help
+
+ About - Lists the current version, author, and maintainer of Gnuscope
+
+ Help - Displays this help (hopefully in another text box).
+
+ K: Big File Display
+ 
+ The Big file display is intended to be used for displaying E vs. dE 2D
+ histograms for use in particle gating and analysis.  It behaves in a
+ similar way to the main interface, but with (E)xpand expanding a region
+ determined by the two most recent markers and the numeric keypad allowing
+ the sliding of the histogram in all (ok only 8) directions.
+
+ To set bananna gates using this interface, click on the first coordinate 
+ you want to include.  Then press "1" on the keyboard and click your way
+ around the particles you want to include.  When you are finished press "0",
+ the selected region should invert its colors to indicate a gate.
+
+ Other Big File Display functions can be accessed though the pulldown menus.
+
+  K.1. File
+
+  Read Big - Read a E - dE 2D histogram
+
+  Write Big - Write the current E - dE 2D histogram
+ 
+  Read Setup - read a setup file for testing.  Similar to Check Setup under
+  the main PGAM menu.
+
+  Read Master Setup - reads a master setup file.  Similar to Read Master
+  Setup under the main PGAM menu.
+
+  K.2. Display
+
+  Refresh - refresh the displayed region of the plot.
+
+  Expand - expands a region determined by the two most recent markers
+
+  Zoom Out - displays the entire E - dE 2D histogram.
+
+  ReDraw - re-renders the displayed region of the 2D histogram.
+
+  Next TwoD - if more than one 2D histogram is in memory, display the next 
+  one.
+
+  Prev TwoD - if more than one 2D histogram is in memory, dispaly the 
+  previous one.
+
+  K.3. Gates
+
+  Read Gates - reads in gates from a file.
+
+  Write Gates - write the current gates to a file.
+
+  Clear Gates - purge the current gates from memory.
+
+  K.4. Sort
+ 
+  Pgam Sort - brings up the PGAM sort interface. 
+
+ L. The PGAM Sort Interface.
+
+ Hopefully most of this is straightforward.
+ 
+  L.1. Runs - default is all, if you desire only some of the runs enter
+  the first and last runs you wish to sort.
+
+  L.2. Records - default is all, if you desire only some of the records,
+  enter the first and last record you wish to sort.
+
+  L.3. Gates - pick the gates you wish to use
+
+  L.4. Output - pick the output types you wish to use
+
+  L.5. Raw Sort - sort what was recorded in the ADC's only, no post
+  processing.  This kind of sorting ignores all other options and only
+  produces 1D histogram output.
+
+  L.6. Sort - sort according to the options selected in L.1. - L.4.
+
+  L.7. Cancel - changed your mind.
+
+ M. The Project Interface
+
+ Again, most of this should be straightforward.  In order to project you have
+ to have some sort of 2D matrix data in memory.  When you hit the project 
+ button the program will figure out which kind you have and sort 
+ appropriately.
+
+  M.1. Add gates
+ 
+  Two choices, from markers or from the entries on the interface.
+
+  M.2. Subtract gates
+
+  Three choices, from markers, from entries on the interface, or a fraction
+  of the total spectrum.
+
+  M.3. Constant to add
+
+  A constant value to be added to every channel in the outgoing histogram.
+
+  M.4. Destintion histogram
+
+  Which histogram to output to.
+
+  M.5. (only for unsymeterized data) X or Y axis selection
+
+  The default is for X, you can pick Y if you want.
+
+  M.6. Project Full button
+
+  Do a full projection, only add gates, all channels, output to histogram 1 
+  or 1 and 2 for symeterized and unsymetrized data respectively.
+
+  M.7. Project button
+
+  Project according to the options you've selected
+
+  M.8. Cancel button
+
+  Changed your mind.
+
+ N: Misc keystrokes
+
+ By pressing keys 0-9 the program will jump to that histogram.
