@@ -16,13 +16,12 @@
 #include "gnuscopefuncs.h"
 #include "gnuscopeglobals.h"
 
-
 //--ddc nov10 gtk2 deprecations
 
 /* --- structs --- */
 
 struct peak_records {
-  int num;       // number of peaks we have information about
+  int num; // number of peaks we have information about
   float *centers;
   float *deviations;
   float *areas;
@@ -49,18 +48,18 @@ struct my_gauss_struct {
 /* --- globals --- */
 
 int abortflag;
-//int histid[254],histsize[254],*histloc[254],histpointer;
-//char field1[254][40],field2[254][40],field3[254][40];
-int intype,spectra,plottype;
+// int histid[254],histsize[254],*histloc[254],histpointer;
+// char field1[254][40],field2[254][40],field3[254][40];
+int intype, spectra, plottype;
 GtkWidget *graph;
-int markers[4],binsize,currentrange[2];
-//int background;
+int markers[4], binsize, currentrange[2];
+// int background;
 int backgroundploydeg;
 int currentmax;
-float globalcalibration[3];//,calibration[254][3];
+float globalcalibration[3]; //,calibration[254][3];
 int globalcalibrationset;
-//int ybinforce,yscaleforce;
-//float ybin,yscale;
+// int ybinforce,yscaleforce;
+// float ybin,yscale;
 long double displayused;
 int numspectra;
 GtkWidget *box1;
@@ -74,21 +73,21 @@ int num_peaks;
 int *peak_locs;
 struct calibration_info calibrationinfo;
 float fitnessthresh;
-GtkWidget *peakfitentry1; // minwidth for autocal/peakfit
-GtkWidget *peakfitentry2; // maxwidth for autocal/peakfit
-GtkWidget *peakfitentry3; // min fitness threshhold for autocal/peakfit
-GtkWidget *peakfitentrya[3]; //min, max, step for coefficient 1
-GtkWidget *peakfitentryb[3]; //min, max, step for coefficient 2
-GtkWidget *peakfitentryc[3]; //min, max, step for coefficient 3
+GtkWidget *peakfitentry1;    // minwidth for autocal/peakfit
+GtkWidget *peakfitentry2;    // maxwidth for autocal/peakfit
+GtkWidget *peakfitentry3;    // min fitness threshhold for autocal/peakfit
+GtkWidget *peakfitentrya[3]; // min, max, step for coefficient 1
+GtkWidget *peakfitentryb[3]; // min, max, step for coefficient 2
+GtkWidget *peakfitentryc[3]; // min, max, step for coefficient 3
 float peakfita[3];
 float peakfitb[3];
 float peakfitc[3];
 
 /* --- Function Declarations --- */
 
-void FindPeaks(float minwidth,float maxwidth);
+void FindPeaks(float minwidth, float maxwidth);
 void PruneSmallPeaks();
-float GaussChiSqr (int a, int b, float center, float deviation, float *area);
+float GaussChiSqr(int a, int b, float center, float deviation, float *area);
 void MultipleGaussFit(int minwidth, int maxwidth);
 void FindPeaksEntry(GtkWidget *widget, GtkWidget *entry);
 void FindPeaksPrompt(GtkWidget *text);
@@ -104,28 +103,26 @@ void CalibsClear();
 void CalibAdd(float energy, float intensity);
 void ReadCalibrationFile(char *sFilename);
 void ListStructClear(struct my_list_struct *stru);
-double ListStructRetrieve(struct my_list_struct *stru,int index);
+double ListStructRetrieve(struct my_list_struct *stru, int index);
 void ListStructDestroy(struct my_list_struct *stru);
 struct my_list_struct *ListStructNew();
 void ListStructAdd(struct my_list_struct *stru, double element);
-void ReturnCloseHits(double a, double b, double c,
-		     struct my_list_struct *centers,
-		     struct my_list_struct *energies,
-		     double cruddiness);
-void AutoCal(int minwidth,int maxwidth);
-int IntComp(int a,int b);
+void ReturnCloseHits(double a, double b, double c, struct my_list_struct *centers,
+                     struct my_list_struct *energies, double cruddiness);
+void AutoCal(int minwidth, int maxwidth);
+int IntComp(int a, int b);
 struct my_gauss_struct *ModifiedSingleGauss(int lchan, int uchan);
-int compare (const void *e1,const void *e2);
+int compare(const void *e1, const void *e2);
 double DMin(double a, double b);
 double DMax(double a, double b);
 int GetSumCounts(int a, int b);
-float GetSumCenter (int a, int b, int counts);
-float GetSumDeviation (int a, int b, int counts, float center);
+float GetSumCenter(int a, int b, int counts);
+float GetSumDeviation(int a, int b, int counts, float center);
 float GetSumFF(int a, int b);
 void PeakFitCallback(GtkWidget *widget, gpointer *data);
 void PeakFitWindow();
-void ClosePeakFitWindow(GtkWidget *widget,gpointer data);
-void ClosePeakFitWindowCancel(GtkWidget *widget,gpointer data);
+void ClosePeakFitWindow(GtkWidget *widget, gpointer data);
+void ClosePeakFitWindowCancel(GtkWidget *widget, gpointer data);
 
 /* --- functions --- */
 
@@ -133,8 +130,7 @@ void ClosePeakFitWindowCancel(GtkWidget *widget,gpointer data);
  *
  * Clears the information in peakrecords
  */
-void PeakRecordClear()
-{
+void PeakRecordClear() {
   if (peakrecords.num > 0) {
     free(peakrecords.centers);
     free(peakrecords.deviations);
@@ -150,24 +146,21 @@ void PeakRecordClear()
  *
  * Adds a peak to the peak records structure
  */
-void PeakRecordAdd(float center, float deviation, float area)
-{
+void PeakRecordAdd(float center, float deviation, float area) {
   int index;
 
   index = peakrecords.num;
   if (peakrecords.num == 0) {
-    peakrecords.centers = (float *) malloc(sizeof(float));
-    peakrecords.deviations = (float *) malloc(sizeof(float));
-    peakrecords.areas = (float *) malloc(sizeof(float));
+    peakrecords.centers = (float *)malloc(sizeof(float));
+    peakrecords.deviations = (float *)malloc(sizeof(float));
+    peakrecords.areas = (float *)malloc(sizeof(float));
     peakrecords.num = 1;
   } else {
     peakrecords.num = peakrecords.num + 1;
-    peakrecords.centers = (float *) realloc(peakrecords.centers,
-					    sizeof(float) * peakrecords.num);
-    peakrecords.deviations = (float *) realloc(peakrecords.deviations,
-					       sizeof(float) * peakrecords.num);
-    peakrecords.areas = (float *) realloc(peakrecords.areas,
-					  sizeof(float) * peakrecords.num);
+    peakrecords.centers = (float *)realloc(peakrecords.centers, sizeof(float) * peakrecords.num);
+    peakrecords.deviations =
+        (float *)realloc(peakrecords.deviations, sizeof(float) * peakrecords.num);
+    peakrecords.areas = (float *)realloc(peakrecords.areas, sizeof(float) * peakrecords.num);
   }
   peakrecords.centers[index] = center;
   peakrecords.deviations[index] = deviation;
@@ -179,22 +172,19 @@ void PeakRecordAdd(float center, float deviation, float area)
  * Returns the value of the center, deviation, and area in
  * the variables past to it.
  */
-float PeakRecordRetrieveCenter(int index)
-{
-  if ((index >=0) && (index < peakrecords.num)) {
-    return(peakrecords.centers[index]);
+float PeakRecordRetrieveCenter(int index) {
+  if ((index >= 0) && (index < peakrecords.num)) {
+    return (peakrecords.centers[index]);
   }
 }
-float PeakRecordRetrieveDeviation(int index)
-{
+float PeakRecordRetrieveDeviation(int index) {
   if ((index >= 0) && (index < peakrecords.num)) {
-    return(peakrecords.deviations[index]);
+    return (peakrecords.deviations[index]);
   }
 }
-float PeakRecordRetrieveArea(int index)
-{
+float PeakRecordRetrieveArea(int index) {
   if ((index >= 0) && (index < peakrecords.num)) {
-    return(peakrecords.areas[index]);
+    return (peakrecords.areas[index]);
   }
 }
 
@@ -202,20 +192,19 @@ float PeakRecordRetrieveArea(int index)
  *
  * Text for the dialog box for find peaks
  */
-void FindPeaksPrompt(GtkWidget *text)
-{
+void FindPeaksPrompt(GtkWidget *text) {
   //--ddc 3jun08 dbg, wrong pointer sent to strnlen (replace &dummystr with
   //--ddc with dummystr.
   char dummystr[80];
-  sprintf(dummystr,"Please enter the approximate peak widths (in channels)") ;
+  sprintf(dummystr, "Please enter the approximate peak widths (in channels)");
   //  gtk_text_insert(GTK_TEXT(text),NULL,NULL,NULL,dummystr,strnlen(dummystr,80));
-  gtk_text_buffer_set_text(mytextbuffer(text),dummystr,strnlen(dummystr,80));
-  sprintf(dummystr,"for channel 1 and channel %d.\n",histsize[spectra]) ;
+  gtk_text_buffer_set_text(mytextbuffer(text), dummystr, strnlen(dummystr, 80));
+  sprintf(dummystr, "for channel 1 and channel %d.\n", histsize[spectra]);
   //  gtk_text_insert(GTK_TEXT(text),NULL,NULL,NULL,dummystr,strnlen(dummystr,80));
-  gtk_text_buffer_set_text(mytextbuffer(text),dummystr,strnlen(dummystr,80));
-  sprintf(dummystr,"Also enter the fitness threshhold for the initial search.\n");
+  gtk_text_buffer_set_text(mytextbuffer(text), dummystr, strnlen(dummystr, 80));
+  sprintf(dummystr, "Also enter the fitness threshhold for the initial search.\n");
   //  gtk_text_insert(GTK_TEXT(text),NULL,NULL,NULL,dummystr,strnlen(dummystr,80));
-  gtk_text_buffer_set_text(mytextbuffer(text),dummystr,strnlen(dummystr,80));
+  gtk_text_buffer_set_text(mytextbuffer(text), dummystr, strnlen(dummystr, 80));
 }
 
 /* FindPeaksEntry
@@ -223,28 +212,27 @@ void FindPeaksPrompt(GtkWidget *text)
  * Gets the minwidth and maxwidth from the dialog entry
  * Calls the peak finding stuff
  */
-void FindPeaksEntry(GtkWidget *widget, GtkWidget *entry)
-{
-  int test,c;
-  float a,b,ff;
-  float minwidth,maxwidth;
+void FindPeaksEntry(GtkWidget *widget, GtkWidget *entry) {
+  int test, c;
+  float a, b, ff;
+  float minwidth, maxwidth;
   char dummystr[80];
 
   num_peaks = 0;
   peak_locs = NULL;
 
-  test = sscanf(gtk_entry_get_text(GTK_ENTRY(entry)),"%f %f %f",&a,&b,&ff);
+  test = sscanf(gtk_entry_get_text(GTK_ENTRY(entry)), "%f %f %f", &a, &b, &ff);
   if ((test == 3) && (b >= a)) {
     minwidth = a / 1.665;
     maxwidth = b / 1.665;
     fitnessthresh = ff;
     WriteMainText("Attempting Peak Fit.\n");
-    FindPeaks(minwidth,maxwidth);
-    sprintf(dummystr,"Found %d peaks\n",num_peaks);
+    FindPeaks(minwidth, maxwidth);
+    sprintf(dummystr, "Found %d peaks\n", num_peaks);
     WriteMainText(dummystr);
     if (num_peaks) {
-      MultipleGaussFit(minwidth,maxwidth);
-      AutoCal(minwidth,maxwidth);
+      MultipleGaussFit(minwidth, maxwidth);
+      AutoCal(minwidth, maxwidth);
     }
   }
 }
@@ -253,15 +241,14 @@ void FindPeaksEntry(GtkWidget *widget, GtkWidget *entry)
  *
  * Finds the centroids of the peaks
  */
-void FindPeaks(float minwidth,float maxwidth)
-{
+void FindPeaks(float minwidth, float maxwidth) {
   int Left_channel, Right_channel;
-  float Chi1,Chi;
+  float Chi1, Chi;
   int Channel;
   float Width0;
-  float area,a1;
+  float area, a1;
   char dummystr[80];
-  int i,j,k;
+  int i, j, k;
   int goodchans;
   int firstgoodchan;
 
@@ -272,18 +259,18 @@ void FindPeaks(float minwidth,float maxwidth)
     Width0 = minwidth + Channel * (maxwidth - minwidth) / histsize[spectra];
     Left_channel = (Channel - 2 * Width0);
     Right_channel = (Channel + 2 * Width0);
-    
+
     if ((Left_channel >= 0) && (Right_channel <= histsize[spectra]) && (Width0 > 0)) {
-   
+
       //   /* --- set the background to the lowest channel between the left and right --- */
       // background = *(histloc[spectra] + Left_channel);
-      //for ( i = Left_channel +1; i <= Right_channel; i++) {
+      // for ( i = Left_channel +1; i <= Right_channel; i++) {
       //	if (*(histloc[spectra] + i) < background) background = *(histloc[spectra] + i);
-      //} 
-      //background--;
-   
-      //Chi = GaussChiSqr(Left_channel,Right_channel,Channel,Width0,&area);
-      //if (Chi != -1) {
+      //}
+      // background--;
+
+      // Chi = GaussChiSqr(Left_channel,Right_channel,Channel,Width0,&area);
+      // if (Chi != -1) {
       //	Chi = Chi / area;
       //
       //	if (Chi < Chi1)  {
@@ -304,34 +291,32 @@ void FindPeaks(float minwidth,float maxwidth)
       //	    printf("peak at %d.\n",Channel);
       //	    Chi1 = Chi;
       //	  }
-      //	} 
-      //}
-      
-      if (GetSumFF(Left_channel,Right_channel) > fitnessthresh) {
-	if (goodchans != 1) {
-	  goodchans = 1;
-	  firstgoodchan = Channel;
-	}
+      //	}
+      // }
+
+      if (GetSumFF(Left_channel, Right_channel) > fitnessthresh) {
+        if (goodchans != 1) {
+          goodchans = 1;
+          firstgoodchan = Channel;
+        }
       } else {
-	if (goodchans) {
-	  goodchans = 0;
-	  num_peaks++;
-	  if (peak_locs == NULL) {
-	    peak_locs = (int *) malloc(sizeof(int) * num_peaks);
-	  } else {
-	    peak_locs = (int *) realloc(peak_locs, sizeof(int) * num_peaks);
-	  }
-	  peak_locs[num_peaks - 1] = (float)(Channel + firstgoodchan) / (float) 2;
-	}
-	
+        if (goodchans) {
+          goodchans = 0;
+          num_peaks++;
+          if (peak_locs == NULL) {
+            peak_locs = (int *)malloc(sizeof(int) * num_peaks);
+          } else {
+            peak_locs = (int *)realloc(peak_locs, sizeof(int) * num_peaks);
+          }
+          peak_locs[num_peaks - 1] = (float)(Channel + firstgoodchan) / (float)2;
+        }
       }
     }
   }
 
-  sprintf(dummystr,"peaks found %d.\n",num_peaks);
+  sprintf(dummystr, "peaks found %d.\n", num_peaks);
   WriteMainText(dummystr);
   printf(dummystr);
-  
 }
 
 /* MultipleGaussFit
@@ -340,44 +325,44 @@ void FindPeaks(float minwidth,float maxwidth)
  * centers in the GSList centers, returning
  * the actually centers, FWHM, and Area
  */
-void MultipleGaussFit(int minwidth, int maxwidth)
-{
-  int width,left_chan,right_chan;
+void MultipleGaussFit(int minwidth, int maxwidth) {
+  int width, left_chan, right_chan;
   int channel;
   float bestfit[4];
   float chiolddeviation;
   int flagw;
-  float center,deviation;
+  float center, deviation;
   int exitflag;
   float deldeviation;
-  float chiold,delx;
-  float chisqr,area;
+  float chiold, delx;
+  float chisqr, area;
   float deldeviationold;
   float centerenergy;
   float deviationenergy;
   char dummystr[80];
   float delxold;
   float correctedcounts;
-  int i,j;
+  int i, j;
   int count;
   int tempbackground;
-  
+
   exitflag = 0;
   abortflag = 0;
 
   PeakRecordClear();
 
   for (i = 1; (i < num_peaks); i++) {
-    printf("%d\n",i);
+    printf("%d\n", i);
     channel = peak_locs[i];
     width = minwidth - channel * (maxwidth - minwidth) / histsize[spectra];
     left_chan = channel - width * 3;
     right_chan = channel + width * 3;
     /* --- set the background to the lowest channel between the left and right --- */
     tempbackground = *(histloc[spectra] + left_chan);
-    for ( j = left_chan +1; j <= right_chan; j++) {
-      if (*(histloc[spectra] + j) < tempbackground) tempbackground = *(histloc[spectra] + j);
-    } 
+    for (j = left_chan + 1; j <= right_chan; j++) {
+      if (*(histloc[spectra] + j) < tempbackground)
+        tempbackground = *(histloc[spectra] + j);
+    }
     bestfit[0] = 1000000;
     chiolddeviation = 10000000;
     deldeviation = -0.05;
@@ -387,73 +372,75 @@ void MultipleGaussFit(int minwidth, int maxwidth)
     /* --- let's see if I can write this without the goto statements --- */
     exitflag = 0;
     count = 0;
-    while ((exitflag != 1) && ((deldeviation > 0.0001) || ((- deldeviation) > 0.0001 ))) {
+    while ((exitflag != 1) && ((deldeviation > 0.0001) || ((-deldeviation) > 0.0001))) {
       if (count > 1000) {
-	GetMessageDialog("Peak Width too narrow.\n");
-	goto quitprocess;
+        GetMessageDialog("Peak Width too narrow.\n");
+        goto quitprocess;
       }
       count++;
-      if (deviation > width * 3) goto peakhasproblems;
+      if (deviation > width * 3)
+        goto peakhasproblems;
       chiold = 1000000;
       delx = 0.1;
-      chisqr = GaussChiSqr(left_chan,right_chan,center,deviation,&area);
-      if (chisqr == -1) exitflag = 1;
+      chisqr = GaussChiSqr(left_chan, right_chan, center, deviation, &area);
+      if (chisqr == -1)
+        exitflag = 1;
       if (chisqr <= chiolddeviation) {
-	chiolddeviation = chisqr;
-	deviation = deviation + deldeviation;
+        chiolddeviation = chisqr;
+        deviation = deviation + deldeviation;
       } else {
-	deldeviationold = deldeviation;
-	deldeviation = - deldeviation / 5;
-	chiolddeviation = chisqr;
-	deviation = deviation + deldeviation;
-      }    
+        deldeviationold = deldeviation;
+        deldeviation = -deldeviation / 5;
+        chiolddeviation = chisqr;
+        deviation = deviation + deldeviation;
+      }
       deviation = deviation - deldeviationold;
-      while ((delx > 0.0009) || (- delx > 0.0009)) {
-	/* --- in case the window hasn't been refreshed recently --- */
-	while (gtk_events_pending()) {
-	  gtk_main_iteration();
-	}
-	if (abortflag) goto quitprocess;
-	chisqr = GaussChiSqr(left_chan,right_chan,center,deviation,&area);
-	if (chisqr == -1) exitflag = 1;
-	if (chisqr <= chiold) {
-	  chiold = chisqr;
-	  center = center + delx;
-	} else {
-	  delxold = delx;
-	  delx = - delx/5;
-	  chiold = chisqr;
-	  center = center + delx;
-	}
-      } 
+      while ((delx > 0.0009) || (-delx > 0.0009)) {
+        /* --- in case the window hasn't been refreshed recently --- */
+        while (gtk_events_pending()) {
+          gtk_main_iteration();
+        }
+        if (abortflag)
+          goto quitprocess;
+        chisqr = GaussChiSqr(left_chan, right_chan, center, deviation, &area);
+        if (chisqr == -1)
+          exitflag = 1;
+        if (chisqr <= chiold) {
+          chiold = chisqr;
+          center = center + delx;
+        } else {
+          delxold = delx;
+          delx = -delx / 5;
+          chiold = chisqr;
+          center = center + delx;
+        }
+      }
       center = center - delxold;
       //    printf("Center: %.1f FWHM: %.1f, Area: %.1f Chisqr: %.1f \n",
       //           center,(deviation*1.665),(area*deviation *1.77245),chisqr);
       if (chisqr < bestfit[0]) {
-	bestfit[0] = chisqr;
-	bestfit[1] = center;
-	bestfit[2] = deviation;
-	bestfit[3] = area;
+        bestfit[0] = chisqr;
+        bestfit[1] = center;
+        bestfit[2] = deviation;
+        bestfit[3] = area;
       }
-    }   
-    sprintf(dummystr,"Center: %.1f FWHM: %.1f, Area %.1f Chisqr:%.1f\n",
-	    bestfit[1]+1,bestfit[2] * 1.665, bestfit[3] * bestfit[2] * 1.77245, bestfit[0]);
+    }
+    sprintf(dummystr, "Center: %.1f FWHM: %.1f, Area %.1f Chisqr:%.1f\n", bestfit[1] + 1,
+            bestfit[2] * 1.665, bestfit[3] * bestfit[2] * 1.77245, bestfit[0]);
     WriteMainText(dummystr);
-    printf("%d to %d ",left_chan+1,right_chan+1);
+    printf("%d to %d ", left_chan + 1, right_chan + 1);
     printf(dummystr);
-    
-    PeakRecordAdd(bestfit[1]+1,bestfit[2],bestfit[3]);
-    ModifiedDisplayGaussian(bestfit[1],bestfit[2],bestfit[3],
-			    left_chan,right_chan);
+
+    PeakRecordAdd(bestfit[1] + 1, bestfit[2], bestfit[3]);
+    ModifiedDisplayGaussian(bestfit[1], bestfit[2], bestfit[3], left_chan, right_chan);
     background[0] = tempbackground;
   peakhasproblems:
     abortflag = 0;
-    
   }
-  //PruneSmallPeaks();
-  printf("%d peaks left\n",peakrecords.num);
- quitprocess:
-    abortflag = 0;
+  // PruneSmallPeaks();
+  printf("%d peaks left\n", peakrecords.num);
+quitprocess:
+  abortflag = 0;
 }
 
 /* ModifiedDisplayGaussian
@@ -461,24 +448,23 @@ void MultipleGaussFit(int minwidth, int maxwidth)
  * Displays multiple gaussian fits
  * accepting GSLists for the centers, deviations, and areas
  */
-void ModifiedDisplayGaussian(float center, float deviation, float area, 
-			     int min_chan, int max_chan)
-{
-  int i,j,k;
-  int a,b;
+void ModifiedDisplayGaussian(float center, float deviation, float area, int min_chan,
+                             int max_chan) {
+  int i, j, k;
+  int a, b;
   float stepsize;
   GdkPoint points;
   int max = 0;
-  int bar_height,next_bar_height;
-  float width,height;
+  int bar_height, next_bar_height;
+  float width, height;
   float column_width;
-  float tempsum,tempavg;
+  float tempsum, tempavg;
   int localmarkers[2];
-  long double rangewidth,currentscaling;
-  float xchan,nextxchan;
+  long double rangewidth, currentscaling;
+  float xchan, nextxchan;
 
   //--ddc 24may06  if (lastgraphclicked != NULL) {
-  if ( GTK_IS_WIDGET(lastgraphclicked) ) {
+  if (GTK_IS_WIDGET(lastgraphclicked)) {
     graph = lastgraphclicked;
     spectra = lastspectraclicked;
   }
@@ -492,63 +478,63 @@ void ModifiedDisplayGaussian(float center, float deviation, float area,
   localmarkers[1] = max_chan - 1;
 
   rangewidth = currentrange[1] - currentrange[0];
-  if (rangewidth !=0){
-    currentscaling = (long double) ((graph->allocation.width-100) / rangewidth);
+  if (rangewidth != 0) {
+    currentscaling = (long double)((graph->allocation.width - 100) / rangewidth);
   }
   //  printf("Rangewidth: %d Currentscaling : %ef ",rangewidth,currentscaling);
-  
+
   /* --- Display each value --- */
   /* --- do this by figuring out which pixels on the screen are between the localmarkers[0-1]
      --- and then plot the gaussian between them. --- */
-  if (binsize >  1) {
+  if (binsize > 1) {
     a = (localmarkers[0] - currentrange[0]) * displayused + 100;
     b = (localmarkers[1] - currentrange[0]) * displayused + 100;
   } else {
     a = (localmarkers[0] - currentrange[0] + 0.5) * currentscaling + 100;
     b = (localmarkers[1] - currentrange[0] + 0.5) * currentscaling + 100;
   }
-     
-  for (i = a; i <= b ; i++) {
+
+  for (i = a; i <= b; i++) {
     /* --- now we have to convert back to get the right channel numbers --- */
     if (binsize > 1) {
-      xchan = (i-100) /displayused + (float) currentrange[0];
+      xchan = (i - 100) / displayused + (float)currentrange[0];
     } else {
-      if ((binsize == 1) && (currentscaling !=0)) {
-        xchan = (i-(100))/currentscaling  + currentrange[0] - .5;
+      if ((binsize == 1) && (currentscaling != 0)) {
+        xchan = (i - (100)) / currentscaling + currentrange[0] - .5;
       }
     }
-    bar_height = 
-      ((area * exp(-(xchan - center)*(xchan-center)/deviation/deviation )) + background[0]) * 
-      binsize;
-    gtk_graph_add_segment(GTK_GRAPH(graph),xchan,bar_height);
+    bar_height = ((area * exp(-(xchan - center) * (xchan - center) / deviation / deviation)) +
+                  background[0]) *
+                 binsize;
+    gtk_graph_add_segment(GTK_GRAPH(graph), xchan, bar_height);
   }
   Redraw();
 }
 
 /* PruneSmallPeaks
- * 
+ *
  * Goes through the peaks which were returned and throws out all peaks
  * which are less than 1/10 the size of the largest peak found
  */
-void PruneSmallPeaks()
-{
+void PruneSmallPeaks() {
   int num_big_peaks;
   float *big_peak_centers;
   float *big_peak_deviations;
   float *big_peak_areas;
-  int i,j,k,l;
-  float largest_area,temp,ltemp;
+  int i, j, k, l;
+  float largest_area, temp, ltemp;
   float lastsize;
-  float ctmp,atmp,dtmp;
+  float ctmp, atmp, dtmp;
   int bigones[15];
   int smallestone;
 
   num_big_peaks = 0;
-  big_peak_centers = (float *) malloc(sizeof(float) * peakrecords.num);
-  big_peak_deviations = (float *) malloc(sizeof(float) * peakrecords.num);
-  big_peak_areas = (float *) malloc(sizeof(float) * peakrecords.num);
-  for (i = 0; i < 15; i++) bigones[i] = 0;
-  
+  big_peak_centers = (float *)malloc(sizeof(float) * peakrecords.num);
+  big_peak_deviations = (float *)malloc(sizeof(float) * peakrecords.num);
+  big_peak_areas = (float *)malloc(sizeof(float) * peakrecords.num);
+  for (i = 0; i < 15; i++)
+    bigones[i] = 0;
+
   /* --- find the largest area --- */
 
   largest_area = 0;
@@ -560,24 +546,24 @@ void PruneSmallPeaks()
     }
   }
 
-  //largest_area = largest_area;
+  // largest_area = largest_area;
   big_peak_centers[num_big_peaks] = PeakRecordRetrieveCenter(j);
   big_peak_deviations[num_big_peaks] = PeakRecordRetrieveDeviation(j);
   big_peak_areas[num_big_peaks] = PeakRecordRetrieveArea(j);
   num_big_peaks = 1;
-  
+
   /* --- order peaks by area --- */
   /* --- make a list of biggest areas --- */
-  
+
   bigones[0] = j;
   lastsize = largest_area;
   ltemp = 0;
-  for (j = 1;( (j < 15) && ( j < peakrecords.num)); j++) {
+  for (j = 1; ((j < 15) && (j < peakrecords.num)); j++) {
     for (i = 0; i < peakrecords.num; i++) {
       temp = PeakRecordRetrieveDeviation(i) * PeakRecordRetrieveArea(i);
       if ((temp > ltemp) && (temp < lastsize)) {
-	k = i;
-	ltemp = temp;
+        k = i;
+        ltemp = temp;
       }
     }
     lastsize = ltemp;
@@ -588,23 +574,21 @@ void PruneSmallPeaks()
 
   num_big_peaks -= 1;
 
-  qsort(bigones,num_big_peaks,sizeof(int),compare);
+  qsort(bigones, num_big_peaks, sizeof(int), compare);
 
-  for ( i = 0; i < num_big_peaks; i++) {
+  for (i = 0; i < num_big_peaks; i++) {
     big_peak_centers[i] = PeakRecordRetrieveCenter(bigones[i]);
     big_peak_deviations[i] = PeakRecordRetrieveDeviation(bigones[i]);
     big_peak_areas[i] = PeakRecordRetrieveArea(bigones[i]);
   }
-  
+
   PeakRecordClear();
   for (i = 0; i < num_big_peaks; i++) {
-    PeakRecordAdd(big_peak_centers[i],big_peak_deviations[i],
-		  big_peak_areas[i]);
-    printf("Center: %.1f FWHM: %.1f Area:%.1f\n",
-	   PeakRecordRetrieveCenter(i),PeakRecordRetrieveDeviation(i) * 1.665,
-	   PeakRecordRetrieveDeviation(i) * 1.77245 * PeakRecordRetrieveArea(i));
+    PeakRecordAdd(big_peak_centers[i], big_peak_deviations[i], big_peak_areas[i]);
+    printf("Center: %.1f FWHM: %.1f Area:%.1f\n", PeakRecordRetrieveCenter(i),
+           PeakRecordRetrieveDeviation(i) * 1.665,
+           PeakRecordRetrieveDeviation(i) * 1.77245 * PeakRecordRetrieveArea(i));
   }
-
 
   g_free(big_peak_centers);
   g_free(big_peak_deviations);
@@ -616,25 +600,24 @@ void PruneSmallPeaks()
  * Reads in a calibration file.  The file should be
  * a list of <energy>,<intensity>
  */
-void ReadCalibrationFile(char *sFilename) 
-{
+void ReadCalibrationFile(char *sFilename) {
   FILE *infile;
   int test;
-  float a,b;
+  float a, b;
   char dummystr[80];
   int i;
 
   CalibsClear();
-  
-  if ((infile = fopen(sFilename,"r")) != NULL) {
-    while(( test = fscanf(infile,"%f %f",&a,&b)) != EOF) {
+
+  if ((infile = fopen(sFilename, "r")) != NULL) {
+    while ((test = fscanf(infile, "%f %f", &a, &b)) != EOF) {
       if (test == 2) {
-	CalibAdd(a,b);
+        CalibAdd(a, b);
       }
     }
   }
-  for (i = 0; i <calibrationinfo.num; i++) {
-    sprintf(dummystr,"%f\n",calibrationinfo.energies[i]);
+  for (i = 0; i < calibrationinfo.num; i++) {
+    sprintf(dummystr, "%f\n", calibrationinfo.energies[i]);
     WriteMainText(dummystr);
   }
 }
@@ -643,16 +626,15 @@ void ReadCalibrationFile(char *sFilename)
  *
  * Add a value to the list of calibrations
  */
-void CalibAdd(float energy, float intensity)
-{
+void CalibAdd(float energy, float intensity) {
   if (calibrationinfo.num) {
-    calibrationinfo.energies = (float *) realloc(calibrationinfo.energies,
-						 sizeof(float) * calibrationinfo.num+1);
-    calibrationinfo.intensities = (float *) realloc(calibrationinfo.intensities,
-						    sizeof(float) * calibrationinfo.num+1);
+    calibrationinfo.energies =
+        (float *)realloc(calibrationinfo.energies, sizeof(float) * calibrationinfo.num + 1);
+    calibrationinfo.intensities =
+        (float *)realloc(calibrationinfo.intensities, sizeof(float) * calibrationinfo.num + 1);
   } else {
-    calibrationinfo.energies = (float *) malloc(sizeof(float));
-    calibrationinfo.intensities = (float *) malloc(sizeof(float));
+    calibrationinfo.energies = (float *)malloc(sizeof(float));
+    calibrationinfo.intensities = (float *)malloc(sizeof(float));
   }
   calibrationinfo.energies[calibrationinfo.num] = energy;
   calibrationinfo.intensities[calibrationinfo.num] = intensity;
@@ -663,33 +645,34 @@ void CalibAdd(float energy, float intensity)
  *
  * Clears the calibration info
  */
-void CalibsClear()
-{
+void CalibsClear() {
   calibrationinfo.num = 0;
-  if (calibrationinfo.energies) free(calibrationinfo.energies);
-  if (calibrationinfo.intensities) free(calibrationinfo.intensities);
+  if (calibrationinfo.energies)
+    free(calibrationinfo.energies);
+  if (calibrationinfo.intensities)
+    free(calibrationinfo.intensities);
 }
 
 /* CalibsRetrieveEnergy
  *
  * Returns the energy of the calibration given by index.
  */
-float CalibsRetrieveEnergy(int index)
-{
+float CalibsRetrieveEnergy(int index) {
   if ((index >= 0) && (index < calibrationinfo.num)) {
-    return(calibrationinfo.energies[index]);
-  } else return(-1);
+    return (calibrationinfo.energies[index]);
+  } else
+    return (-1);
 }
 
 /* CalibsRetrieveIntensity
  *
  * Returns the intensities of the calibration given by index.
  */
-float CalibsRetrieveIntensity(int index)
-{
+float CalibsRetrieveIntensity(int index) {
   if ((index >= 0) && (index < calibrationinfo.num)) {
-    return(calibrationinfo.intensities[index]);
-  } else return(-1);
+    return (calibrationinfo.intensities[index]);
+  } else
+    return (-1);
 }
 
 /* AutoCal
@@ -703,21 +686,20 @@ float CalibsRetrieveIntensity(int index)
  * Then try removing 1 calibration point at a time and
  * trying again.  Stop when Chisqr goes less than 1.
  */
-void AutoCal(int minwidth,int maxwidth)
-{
-  double d,b,c;
+void AutoCal(int minwidth, int maxwidth) {
+  double d, b, c;
   struct my_list_struct *clist;
   struct my_list_struct *elist;
-  int i,j,k;
-  double dela,delb,delc;
-  double *dummy,a[3];
+  int i, j, k;
+  double dela, delb, delc;
+  double *dummy, a[3];
   double w[3];
   double chisqr;
   char dummystr[120];
   struct my_gauss_struct *stru;
   int temp, f;
   int oldnum;
-  float x,y,z;
+  float x, y, z;
 
   g_return_if_fail(calibrationinfo.num > 0);
 
@@ -743,47 +725,47 @@ void AutoCal(int minwidth,int maxwidth)
     while (x <= peakfita[1]) {
       y = peakfitb[0];
       while (y <= peakfitb[1]) {
-	while (gtk_events_pending()) {
-	  gtk_main_iteration();
-	}
-	if (abortflag) goto quitprocess;
+        while (gtk_events_pending()) {
+          gtk_main_iteration();
+        }
+        if (abortflag)
+          goto quitprocess;
 
-	ReturnCloseHits(x,y,z,clist,elist,30);
-	if (clist->num > 4) {
-	  PolFit(3,clist->list,elist->list,dummy,clist->num,0,a);
-	  oldnum = clist->num - 1;
-	  while (clist->num > oldnum) {
-	    ListStructClear(clist);
-	    ListStructClear(elist);
-	    ReturnCloseHits(a[0],a[1],a[2],clist,elist,50);
-	    PolFit(3,clist->list,elist->list,dummy,clist->num,0,a);
-	    PolChiSqr(a,3,clist->list,elist->list,clist->num, &chisqr);
-	    oldnum = clist->num;
-	    printf("chisqr = %f\n",chisqr);
-	    if (chisqr <= 10)
-	      goto stop;
-	  }
-	}
+        ReturnCloseHits(x, y, z, clist, elist, 30);
+        if (clist->num > 4) {
+          PolFit(3, clist->list, elist->list, dummy, clist->num, 0, a);
+          oldnum = clist->num - 1;
+          while (clist->num > oldnum) {
+            ListStructClear(clist);
+            ListStructClear(elist);
+            ReturnCloseHits(a[0], a[1], a[2], clist, elist, 50);
+            PolFit(3, clist->list, elist->list, dummy, clist->num, 0, a);
+            PolChiSqr(a, 3, clist->list, elist->list, clist->num, &chisqr);
+            oldnum = clist->num;
+            printf("chisqr = %f\n", chisqr);
+            if (chisqr <= 10)
+              goto stop;
+          }
+        }
 
-	ListStructClear(clist);
-	ListStructClear(elist);
-	y += peakfitb[2];
+        ListStructClear(clist);
+        ListStructClear(elist);
+        y += peakfitb[2];
       }
       x += peakfita[2];
     }
     z += peakfitc[2];
   }
 
-
   //  for (k = 0; k < 100; k++) {
   //  c = c + delc;
   //  d = 0;
-  //  for (j = 0; j < 100; j++) {        
+  //  for (j = 0; j < 100; j++) {
   //    while (gtk_events_pending()) {
   //	gtk_main_iteration();
   //   }
   //   if (abortflag) goto quitprocess;
-  //   
+  //
   //   d = d + dela;
   //   b = 0;
   //   for (i = 0; i < 200; i++) {
@@ -812,54 +794,52 @@ void AutoCal(int minwidth,int maxwidth)
   //}
   f = 1;
   goto failure;
- stop:
-  printf("%f %f %f\n",a[0],a[1],a[2]);
+stop:
+  printf("%f %f %f\n", a[0], a[1], a[2]);
   /* --- at this point we are pretty sure that we have a resonable calibration --- */
   /* --- however, we need to see if the peaks that were not found initially are
      --- actually there --- */
 
   /* --- let's clear out the original peak list, and make another one to re-
      --- perform the multiple gauss fit --- */
-  //g_free(peak_locs);
-  //num_peaks = calibrationinfo.num;
-  //peak_locs = (int *) malloc(sizeof(int) * num_peaks);
+  // g_free(peak_locs);
+  // num_peaks = calibrationinfo.num;
+  // peak_locs = (int *) malloc(sizeof(int) * num_peaks);
 
   //  for (i  = 0; i < calibrationinfo.num; i++) {
   //  temp = (- a[1] + sqrt(pow(a[1],2) - 4 * (a[0] - calibrationinfo.energies[i]) * a[2])) /
   //    (2 * a[2]);
   //  peak_locs[i] = temp;
   //}
-  //  /* --- in order to get a good minwidth and maxwidth, let's do a 
+  //  /* --- in order to get a good minwidth and maxwidth, let's do a
   //   --- linear fit to the widths of the peaks we have found --- */
-  //ListStructClear(clist);
-  //ListStructClear(elist);
-  //for (i = 0; i < peakrecords.num; i++) {
+  // ListStructClear(clist);
+  // ListStructClear(elist);
+  // for (i = 0; i < peakrecords.num; i++) {
   //  ListStructAdd(clist,peakrecords.centers[i]);
   //  ListStructAdd(elist,peakrecords.deviations[i]);
   // }
-  //PolFit(2,clist->list,elist->list,dummy,clist->num,0,w);
-  
-  
+  // PolFit(2,clist->list,elist->list,dummy,clist->num,0,w);
+
   //  MultipleGaussFit(w[0],w[0] + (w[1] * histsize[spectra]));
 
   //  ListStructClear(clist);
-  //ListStructClear(elist);
-  //ReturnCloseHits(a[0],a[1],a[2],clist,elist,50);
-  //PolFit(3,clist->list,elist->list,dummy,clist->num,0,a);
-  //PolChiSqr(a,3,clist->list,elist->list,clist->num, &chisqr);
-  //oldnum = clist->num;
-  
- failure:
-  
-  sprintf(dummystr,"y = %e + %e * x + %e * x^2 chisqr = %e.\n",
-	  a[0],a[1],a[2],chisqr);
+  // ListStructClear(elist);
+  // ReturnCloseHits(a[0],a[1],a[2],clist,elist,50);
+  // PolFit(3,clist->list,elist->list,dummy,clist->num,0,a);
+  // PolChiSqr(a,3,clist->list,elist->list,clist->num, &chisqr);
+  // oldnum = clist->num;
+
+failure:
+
+  sprintf(dummystr, "y = %e + %e * x + %e * x^2 chisqr = %e.\n", a[0], a[1], a[2], chisqr);
   WriteMainText(dummystr);
   for (i = 0; i < clist->num; i++) {
-    sprintf(dummystr," %f %f\n",clist->list[i],elist->list[i]);
+    sprintf(dummystr, " %f %f\n", clist->list[i], elist->list[i]);
     WriteMainText(dummystr);
   }
 
- quitprocess:
+quitprocess:
 
   ListStructDestroy(clist);
   ListStructDestroy(elist);
@@ -871,62 +851,56 @@ void AutoCal(int minwidth,int maxwidth)
  * lists if the centers nearly line up with the energies
  * via an approximate calibration
  */
-void ReturnCloseHits(double a, double b, double c,
-		     struct my_list_struct *centers,
-		     struct my_list_struct *energies,
-		     double cruddiness)
-{
-  int i,j,k;
-  double temp,temp2,temp3;
-  int step,point;
+void ReturnCloseHits(double a, double b, double c, struct my_list_struct *centers,
+                     struct my_list_struct *energies, double cruddiness) {
+  int i, j, k;
+  double temp, temp2, temp3;
+  int step, point;
 
   for (i = 0; i < calibrationinfo.num; i++) {
     /* --- let's get the approximate channel for each energy --- */
-    temp = (- b + sqrt(pow(b,2) - 4 * (a - calibrationinfo.energies[i]) * c)) /
-      (2 * c);
+    temp = (-b + sqrt(pow(b, 2) - 4 * (a - calibrationinfo.energies[i]) * c)) / (2 * c);
     for (j = 0; j < (peakrecords.num - 1); j++) {
-      if ((peakrecords.centers[j] < temp) &&
-	(peakrecords.centers[j+1] > temp)) {
-	temp2 = fabs(temp - peakrecords.centers[j]);
-	temp3 = fabs(temp - peakrecords.centers[j + 1]);
-	if (temp3 < temp2) {
-	  temp2 = temp3;
-	  j++;
-	}
-	if (temp2 <= cruddiness) {
-	  ListStructAdd(centers,peakrecords.centers[j]);
-	  ListStructAdd(energies,calibrationinfo.energies[i]); 
-	}
+      if ((peakrecords.centers[j] < temp) && (peakrecords.centers[j + 1] > temp)) {
+        temp2 = fabs(temp - peakrecords.centers[j]);
+        temp3 = fabs(temp - peakrecords.centers[j + 1]);
+        if (temp3 < temp2) {
+          temp2 = temp3;
+          j++;
+        }
+        if (temp2 <= cruddiness) {
+          ListStructAdd(centers, peakrecords.centers[j]);
+          ListStructAdd(energies, calibrationinfo.energies[i]);
+        }
       } else {
-	if ((j+2) == peakrecords.num) {
-	  temp2 = fabs(temp - peakrecords.centers[j+1]);
-	  if (temp2 < cruddiness) {
-	  ListStructAdd(centers,peakrecords.centers[j+1]);
-	  ListStructAdd(energies,calibrationinfo.energies[i]); 
-	  }
-	}
+        if ((j + 2) == peakrecords.num) {
+          temp2 = fabs(temp - peakrecords.centers[j + 1]);
+          if (temp2 < cruddiness) {
+            ListStructAdd(centers, peakrecords.centers[j + 1]);
+            ListStructAdd(energies, calibrationinfo.energies[i]);
+          }
+        }
       }
     }
   }
 
   if (centers->num > 3) {
     for (i = 0; i < centers->num; i++) {
-      printf("%f %f\n",centers->list[i],energies->list[i]);
+      printf("%f %f\n", centers->list[i], energies->list[i]);
     }
-    if (centers->num) printf("\n");
+    if (centers->num)
+      printf("\n");
   }
-
 }
 
 /* ListStructNew
  *
  * creates a my_list_struct
  */
-struct my_list_struct *ListStructNew()
-{
+struct my_list_struct *ListStructNew() {
   struct my_list_struct *ret;
 
-  ret = (struct my_list_struct *) malloc(sizeof(struct my_list_struct));
+  ret = (struct my_list_struct *)malloc(sizeof(struct my_list_struct));
   ret->num = 0;
   ret->list = NULL;
 }
@@ -935,10 +909,9 @@ struct my_list_struct *ListStructNew()
  *
  * Adds an element to my_list_struct
  */
-void ListStructAdd(struct my_list_struct *stru, double element)
-{
+void ListStructAdd(struct my_list_struct *stru, double element) {
   stru->num++;
-  stru->list = (double *) g_realloc(stru->list,sizeof(double) * stru->num);
+  stru->list = (double *)g_realloc(stru->list, sizeof(double) * stru->num);
   stru->list[stru->num - 1] = element;
 }
 
@@ -946,8 +919,7 @@ void ListStructAdd(struct my_list_struct *stru, double element)
  *
  * Destroys a my_list_struct
  */
-void ListStructDestroy(struct my_list_struct *stru)
-{
+void ListStructDestroy(struct my_list_struct *stru) {
   g_free(stru->list);
   g_free(stru);
 }
@@ -956,43 +928,40 @@ void ListStructDestroy(struct my_list_struct *stru)
  *
  * Retreives element[index] from the list struct
  */
-double ListStructRetrieve(struct my_list_struct *stru,int index)
-{
+double ListStructRetrieve(struct my_list_struct *stru, int index) {
   if ((index >= 0) && (index < stru->num))
-    return(stru->list[index]);
+    return (stru->list[index]);
   else
-    return(-1);
+    return (-1);
 }
 
 /* ListStructClear
  *
  * resets a my_list_struct
  */
-void ListStructClear(struct my_list_struct *stru)
-{
+void ListStructClear(struct my_list_struct *stru) {
   stru->num = 0;
   g_free(stru->list);
   stru->list = NULL;
 }
 
-int compare (const void *e1,const void *e2)
-{
-  return((int)( *(int *) e1 - *(int *) e2));
+int compare(const void *e1, const void *e2) {
+  return ((int)(*(int *)e1 - *(int *)e2));
 }
 
-double DMin(double a, double b)
-{
-  if (a <= b) return(b);
-  else return(a);
+double DMin(double a, double b) {
+  if (a <= b)
+    return (b);
+  else
+    return (a);
 }
 
-double DMax(double a, double b)
-{
-  if (a >= b) return(b);
-  else return(a);
+double DMax(double a, double b) {
+  if (a >= b)
+    return (b);
+  else
+    return (a);
 }
-
-
 
 /* ModifiedSingleGauss
  *
@@ -1000,87 +969,91 @@ double DMax(double a, double b)
  * a my_gauss_struct pointer
  * Requires a range to fit
  */
-struct my_gauss_struct *ModifiedSingleGauss(int lchan, int uchan) 
-{
+struct my_gauss_struct *ModifiedSingleGauss(int lchan, int uchan) {
   int width;
   int channel;
   float bestfit[4];
   float chiolddeviation;
   int flagw;
-  float center,deviation;
+  float center, deviation;
   int exitflag;
   float deldeviation;
-  float chiold,delx;
-  float chisqr,area;
+  float chiold, delx;
+  float chisqr, area;
   float deldeviationold;
   float centerenergy;
   float deviationenergy;
   char dummystr[80];
   float delxold;
   float correctedcounts;
-  int i,j;
+  int i, j;
   int count;
   struct my_gauss_struct *stru;
   int tempbackground;
-  
+
   exitflag = 0;
   abortflag = 0;
-  stru = (struct my_gauss_struct *) malloc(sizeof(struct my_gauss_struct));
+  stru = (struct my_gauss_struct *)malloc(sizeof(struct my_gauss_struct));
 
   width = uchan - lchan;
   /* --- set the background to the lowest channel between the left and right --- */
   tempbackground = *(histloc[spectra] + lchan);
-  for ( j = lchan +1; j <= uchan; j++) {
-    if (*(histloc[spectra] + j) < tempbackground) tempbackground = *(histloc[spectra] + j);
-  } 
+  for (j = lchan + 1; j <= uchan; j++) {
+    if (*(histloc[spectra] + j) < tempbackground)
+      tempbackground = *(histloc[spectra] + j);
+  }
   bestfit[0] = 1000000;
   chiolddeviation = 10000000;
   deldeviation = -0.05;
   flagw = 0;
   center = (lchan + uchan) / 2;
   deviation = width;
-  
+
   exitflag = 0;
   count = 0;
-  while ((exitflag != 1) && ((deldeviation > 0.0001) || ((- deldeviation) > 0.0001 ))) {
+  while ((exitflag != 1) && ((deldeviation > 0.0001) || ((-deldeviation) > 0.0001))) {
     if (count > 1000) {
       GetMessageDialog("Peak Width too narrow.\n");
       goto quitprocess;
     }
     count++;
-    if (deviation > width * 3) goto peakhasproblems;
+    if (deviation > width * 3)
+      goto peakhasproblems;
     chiold = 1000000;
     delx = 0.1;
-    chisqr = GaussChiSqr(lchan,uchan,center,deviation,&area);
-    if (chisqr == -1) exitflag = 1;
+    chisqr = GaussChiSqr(lchan, uchan, center, deviation, &area);
+    if (chisqr == -1)
+      exitflag = 1;
     if (chisqr <= chiolddeviation) {
       chiolddeviation = chisqr;
       deviation = deviation + deldeviation;
     } else {
       deldeviationold = deldeviation;
-      deldeviation = - deldeviation / 5;
+      deldeviation = -deldeviation / 5;
       chiolddeviation = chisqr;
       deviation = deviation + deldeviation;
-    }    
+    }
     deviation = deviation - deldeviationold;
-    while ((delx > 0.0009) || (- delx > 0.0009)) {
+    while ((delx > 0.0009) || (-delx > 0.0009)) {
       /* --- in case the window hasn't been refreshed recently --- */
       while (gtk_events_pending()) {
-	gtk_main_iteration();
+        gtk_main_iteration();
       }
-      if (abortflag) goto quitprocess;
-      chisqr = GaussChiSqr(lchan,uchan,center,deviation,&area);
-      if (chisqr == -1) exitflag = 1;
+      if (abortflag)
+        goto quitprocess;
+      chisqr = GaussChiSqr(lchan, uchan, center, deviation, &area);
+      if (chisqr == -1)
+        exitflag = 1;
       if (chisqr <= chiold) {
-	chiold = chisqr;
-	center = center + delx;
+        chiold = chisqr;
+        center = center + delx;
       } else {
-	delxold = delx;
-	delx = - delx/5;
-	chiold = chisqr;
-	center = center + delx;
+        delxold = delx;
+        delx = -delx / 5;
+        chiold = chisqr;
+        center = center + delx;
       }
-    } 
+    }
     center = center - delxold;
     if (chisqr < bestfit[0]) {
       bestfit[0] = chisqr;
@@ -1088,29 +1061,27 @@ struct my_gauss_struct *ModifiedSingleGauss(int lchan, int uchan)
       bestfit[2] = deviation;
       bestfit[3] = area;
     }
-  }   
-  
+  }
+
   stru->center = bestfit[1];
   stru->deviation = bestfit[2];
   stru->area = bestfit[3];
   stru->chisqr = bestfit[0];
   background[0] = tempbackground;
 
- peakhasproblems:
-  
-  
- quitprocess:
+peakhasproblems:
+
+quitprocess:
   abortflag = 0;
   g_free(stru);
-  return(NULL);
+  return (NULL);
 }
 
 /* PeakFitWindow
  *
  * Creates the PeakFitWindow with the appropriate stuff in it
  */
-void PeakFitWindow()
-{
+void PeakFitWindow() {
   char dummystr[80];
   GtkWidget *localwindow;
   GtkWidget *localbutton;
@@ -1123,150 +1094,145 @@ void PeakFitWindow()
   /* --- spawn the window --- */
 
   localwindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_title(GTK_WINDOW(localwindow),"Peak Search");
-  gtk_window_set_modal(GTK_WINDOW(localwindow),TRUE);
-  gtk_window_set_position(GTK_WINDOW(localwindow),GTK_WIN_POS_CENTER);
+  gtk_window_set_title(GTK_WINDOW(localwindow), "Peak Search");
+  gtk_window_set_modal(GTK_WINDOW(localwindow), TRUE);
+  gtk_window_set_position(GTK_WINDOW(localwindow), GTK_WIN_POS_CENTER);
 
   /* --- create the vbox in which to put everything --- */
-  localvbox = gtk_vbox_new(FALSE,0);
-  gtk_container_add(GTK_CONTAINER(localwindow),localvbox);
-  
+  localvbox = gtk_vbox_new(FALSE, 0);
+  gtk_container_add(GTK_CONTAINER(localwindow), localvbox);
+
   /* --- now let's create a framebox for the peak finding options --- */
-  
+
   localframe = gtk_frame_new("Peak Search");
-  gtk_container_add(GTK_CONTAINER(localvbox),localframe);
-  framevbox = gtk_vbox_new(FALSE,0);
-  gtk_container_add(GTK_CONTAINER(localframe),framevbox);
+  gtk_container_add(GTK_CONTAINER(localvbox), localframe);
+  framevbox = gtk_vbox_new(FALSE, 0);
+  gtk_container_add(GTK_CONTAINER(localframe), framevbox);
 
   /* --- create the components of the frame --- */
-  
+
   locallabel = gtk_label_new("Approximate FWHM");
-  gtk_container_add(GTK_CONTAINER(framevbox),locallabel);
+  gtk_container_add(GTK_CONTAINER(framevbox), locallabel);
 
-  localhbox = gtk_hbox_new(FALSE,0);
-  gtk_container_add(GTK_CONTAINER(framevbox),localhbox);
+  localhbox = gtk_hbox_new(FALSE, 0);
+  gtk_container_add(GTK_CONTAINER(framevbox), localhbox);
   locallabel = gtk_label_new("At Channel 1:");
-  gtk_container_add(GTK_CONTAINER(localhbox),locallabel);
+  gtk_container_add(GTK_CONTAINER(localhbox), locallabel);
   peakfitentry1 = gtk_entry_new();
-  gtk_container_add(GTK_CONTAINER(localhbox),peakfitentry1);
+  gtk_container_add(GTK_CONTAINER(localhbox), peakfitentry1);
 
-  localhbox = gtk_hbox_new(FALSE,0);
-  gtk_container_add(GTK_CONTAINER(framevbox),localhbox);
-  sprintf(dummystr,"At Channel %d:",histsize[spectra]);
+  localhbox = gtk_hbox_new(FALSE, 0);
+  gtk_container_add(GTK_CONTAINER(framevbox), localhbox);
+  sprintf(dummystr, "At Channel %d:", histsize[spectra]);
   locallabel = gtk_label_new(dummystr);
-  gtk_container_add(GTK_CONTAINER(localhbox),locallabel);
+  gtk_container_add(GTK_CONTAINER(localhbox), locallabel);
   peakfitentry2 = gtk_entry_new();
-  gtk_container_add(GTK_CONTAINER(localhbox),peakfitentry2);
+  gtk_container_add(GTK_CONTAINER(localhbox), peakfitentry2);
 
   locallabel = gtk_label_new("Fitness Threshhold for Initial Scan");
-  gtk_container_add(GTK_CONTAINER(framevbox),locallabel);
+  gtk_container_add(GTK_CONTAINER(framevbox), locallabel);
   peakfitentry3 = gtk_entry_new();
-  gtk_container_add(GTK_CONTAINER(framevbox),peakfitentry3);
+  gtk_container_add(GTK_CONTAINER(framevbox), peakfitentry3);
 
   /* --- make a frame for the autocalibrate functions --- */
 
   localframe = gtk_frame_new("Autocalibrate");
-  gtk_container_add(GTK_CONTAINER(localvbox),localframe);
-  framevbox = gtk_vbox_new(FALSE,0);
-  gtk_container_add(GTK_CONTAINER(localframe),framevbox);
+  gtk_container_add(GTK_CONTAINER(localvbox), localframe);
+  framevbox = gtk_vbox_new(FALSE, 0);
+  gtk_container_add(GTK_CONTAINER(localframe), framevbox);
 
-  localhbox = gtk_hbox_new(FALSE,0);
-  gtk_container_add(GTK_CONTAINER(framevbox),localhbox);
+  localhbox = gtk_hbox_new(FALSE, 0);
+  gtk_container_add(GTK_CONTAINER(framevbox), localhbox);
   locallabel = gtk_label_new("A: ");
-  gtk_container_add(GTK_CONTAINER(localhbox),locallabel);
+  gtk_container_add(GTK_CONTAINER(localhbox), locallabel);
   locallabel = gtk_label_new("Min:");
-  gtk_container_add(GTK_CONTAINER(localhbox),locallabel);
+  gtk_container_add(GTK_CONTAINER(localhbox), locallabel);
   peakfitentrya[0] = gtk_entry_new();
-  sprintf(dummystr,"%f",peakfita[0]);
-  gtk_entry_set_text(GTK_ENTRY(peakfitentrya[0]),dummystr);
-  gtk_container_add(GTK_CONTAINER(localhbox),peakfitentrya[0]);
+  sprintf(dummystr, "%f", peakfita[0]);
+  gtk_entry_set_text(GTK_ENTRY(peakfitentrya[0]), dummystr);
+  gtk_container_add(GTK_CONTAINER(localhbox), peakfitentrya[0]);
   locallabel = gtk_label_new("Max:");
-  gtk_container_add(GTK_CONTAINER(localhbox),locallabel);
+  gtk_container_add(GTK_CONTAINER(localhbox), locallabel);
   peakfitentrya[1] = gtk_entry_new();
-  sprintf(dummystr,"%f",peakfita[1]);
-  gtk_entry_set_text(GTK_ENTRY(peakfitentrya[1]),dummystr);
-  gtk_container_add(GTK_CONTAINER(localhbox),peakfitentrya[1]);
+  sprintf(dummystr, "%f", peakfita[1]);
+  gtk_entry_set_text(GTK_ENTRY(peakfitentrya[1]), dummystr);
+  gtk_container_add(GTK_CONTAINER(localhbox), peakfitentrya[1]);
   locallabel = gtk_label_new("Step:");
-  gtk_container_add(GTK_CONTAINER(localhbox),locallabel);
+  gtk_container_add(GTK_CONTAINER(localhbox), locallabel);
   peakfitentrya[2] = gtk_entry_new();
-  sprintf(dummystr,"%f",peakfita[2]);
-  gtk_entry_set_text(GTK_ENTRY(peakfitentrya[2]),dummystr);
-  gtk_container_add(GTK_CONTAINER(localhbox),peakfitentrya[2]);
+  sprintf(dummystr, "%f", peakfita[2]);
+  gtk_entry_set_text(GTK_ENTRY(peakfitentrya[2]), dummystr);
+  gtk_container_add(GTK_CONTAINER(localhbox), peakfitentrya[2]);
 
-  localhbox = gtk_hbox_new(FALSE,0);
-  gtk_container_add(GTK_CONTAINER(framevbox),localhbox);
+  localhbox = gtk_hbox_new(FALSE, 0);
+  gtk_container_add(GTK_CONTAINER(framevbox), localhbox);
   locallabel = gtk_label_new("B: ");
-  gtk_container_add(GTK_CONTAINER(localhbox),locallabel);
+  gtk_container_add(GTK_CONTAINER(localhbox), locallabel);
   locallabel = gtk_label_new("Min:");
-  gtk_container_add(GTK_CONTAINER(localhbox),locallabel);
+  gtk_container_add(GTK_CONTAINER(localhbox), locallabel);
   peakfitentryb[0] = gtk_entry_new();
-  sprintf(dummystr,"%f",peakfitb[0]);
-  gtk_entry_set_text(GTK_ENTRY(peakfitentryb[0]),dummystr);
-  gtk_container_add(GTK_CONTAINER(localhbox),peakfitentryb[0]);
+  sprintf(dummystr, "%f", peakfitb[0]);
+  gtk_entry_set_text(GTK_ENTRY(peakfitentryb[0]), dummystr);
+  gtk_container_add(GTK_CONTAINER(localhbox), peakfitentryb[0]);
   locallabel = gtk_label_new("Max:");
-  gtk_container_add(GTK_CONTAINER(localhbox),locallabel);
+  gtk_container_add(GTK_CONTAINER(localhbox), locallabel);
   peakfitentryb[1] = gtk_entry_new();
-  sprintf(dummystr,"%f",peakfitb[1]);
-  gtk_entry_set_text(GTK_ENTRY(peakfitentryb[1]),dummystr);
-  gtk_container_add(GTK_CONTAINER(localhbox),peakfitentryb[1]);
+  sprintf(dummystr, "%f", peakfitb[1]);
+  gtk_entry_set_text(GTK_ENTRY(peakfitentryb[1]), dummystr);
+  gtk_container_add(GTK_CONTAINER(localhbox), peakfitentryb[1]);
   locallabel = gtk_label_new("Step:");
-  gtk_container_add(GTK_CONTAINER(localhbox),locallabel);
+  gtk_container_add(GTK_CONTAINER(localhbox), locallabel);
   peakfitentryb[2] = gtk_entry_new();
-  sprintf(dummystr,"%f",peakfitb[2]);
-  gtk_entry_set_text(GTK_ENTRY(peakfitentryb[2]),dummystr);
-  gtk_container_add(GTK_CONTAINER(localhbox),peakfitentryb[2]);
-  
+  sprintf(dummystr, "%f", peakfitb[2]);
+  gtk_entry_set_text(GTK_ENTRY(peakfitentryb[2]), dummystr);
+  gtk_container_add(GTK_CONTAINER(localhbox), peakfitentryb[2]);
 
-  localhbox = gtk_hbox_new(FALSE,0);
-  gtk_container_add(GTK_CONTAINER(framevbox),localhbox);
+  localhbox = gtk_hbox_new(FALSE, 0);
+  gtk_container_add(GTK_CONTAINER(framevbox), localhbox);
   locallabel = gtk_label_new("C: ");
-  gtk_container_add(GTK_CONTAINER(localhbox),locallabel);
+  gtk_container_add(GTK_CONTAINER(localhbox), locallabel);
   locallabel = gtk_label_new("Min:");
-  gtk_container_add(GTK_CONTAINER(localhbox),locallabel);
+  gtk_container_add(GTK_CONTAINER(localhbox), locallabel);
   peakfitentryc[0] = gtk_entry_new();
-  sprintf(dummystr,"%e",peakfitc[0]);
-  gtk_entry_set_text(GTK_ENTRY(peakfitentryc[0]),dummystr);
-  gtk_container_add(GTK_CONTAINER(localhbox),peakfitentryc[0]);
+  sprintf(dummystr, "%e", peakfitc[0]);
+  gtk_entry_set_text(GTK_ENTRY(peakfitentryc[0]), dummystr);
+  gtk_container_add(GTK_CONTAINER(localhbox), peakfitentryc[0]);
   locallabel = gtk_label_new("Max:");
-  gtk_container_add(GTK_CONTAINER(localhbox),locallabel);
+  gtk_container_add(GTK_CONTAINER(localhbox), locallabel);
   peakfitentryc[1] = gtk_entry_new();
-  sprintf(dummystr,"%e",peakfitc[1]);
-  gtk_entry_set_text(GTK_ENTRY(peakfitentryc[1]),dummystr);
-  gtk_container_add(GTK_CONTAINER(localhbox),peakfitentryc[1]);
+  sprintf(dummystr, "%e", peakfitc[1]);
+  gtk_entry_set_text(GTK_ENTRY(peakfitentryc[1]), dummystr);
+  gtk_container_add(GTK_CONTAINER(localhbox), peakfitentryc[1]);
   locallabel = gtk_label_new("Step:");
-  gtk_container_add(GTK_CONTAINER(localhbox),locallabel);
+  gtk_container_add(GTK_CONTAINER(localhbox), locallabel);
   peakfitentryc[2] = gtk_entry_new();
-  sprintf(dummystr,"%e",peakfitc[2]);
-  gtk_entry_set_text(GTK_ENTRY(peakfitentryc[2]),dummystr);
-  gtk_container_add(GTK_CONTAINER(localhbox),peakfitentryc[2]);
-  
-  
+  sprintf(dummystr, "%e", peakfitc[2]);
+  gtk_entry_set_text(GTK_ENTRY(peakfitentryc[2]), dummystr);
+  gtk_container_add(GTK_CONTAINER(localhbox), peakfitentryc[2]);
 
   /* --- make the button to find the peaks --- */
 
   localbutton = gtk_button_new_with_label("Find Peaks");
   /*--ddc aug11 deprecations
   gtk_signal_connect(GTK_OBJECT(localbutton),"clicked",
-		     G_CALLBACK(PeakFitCallback),NULL);
+                     G_CALLBACK(PeakFitCallback),NULL);
   gtk_signal_connect_object(GTK_OBJECT(localbutton),"clicked",
-			    G_CALLBACK(ClosePeakFitWindow),GTK_OBJECT(localwindow));
+                            G_CALLBACK(ClosePeakFitWindow),GTK_OBJECT(localwindow));
   */
-  g_signal_connect(GTK_OBJECT(localbutton),"clicked",
-		     G_CALLBACK(PeakFitCallback),NULL);
-  g_signal_connect_swapped(GTK_OBJECT(localbutton),"clicked",
-			    G_CALLBACK(ClosePeakFitWindow),GTK_OBJECT(localwindow));
-  gtk_container_add(GTK_CONTAINER(localvbox),localbutton);
+  g_signal_connect(GTK_OBJECT(localbutton), "clicked", G_CALLBACK(PeakFitCallback), NULL);
+  g_signal_connect_swapped(GTK_OBJECT(localbutton), "clicked", G_CALLBACK(ClosePeakFitWindow),
+                           GTK_OBJECT(localwindow));
+  gtk_container_add(GTK_CONTAINER(localvbox), localbutton);
 
   /* --- make the cancel button --- */
 
   localbutton = gtk_button_new_with_label("Cancel");
   //--ddc aug11 deprecation  gtk_signal_connect_object(GTK_OBJECT(localbutton),"clicked",
-  g_signal_connect_swapped(GTK_OBJECT(localbutton),"clicked",
-			    G_CALLBACK(ClosePeakFitWindowCancel),GTK_OBJECT(localwindow));
-  gtk_container_add(GTK_CONTAINER(localvbox),localbutton);
+  g_signal_connect_swapped(GTK_OBJECT(localbutton), "clicked", G_CALLBACK(ClosePeakFitWindowCancel),
+                           GTK_OBJECT(localwindow));
+  gtk_container_add(GTK_CONTAINER(localvbox), localbutton);
 
   gtk_widget_show_all(localwindow);
-
 }
 
 /* PeakFitCallback
@@ -1274,9 +1240,8 @@ void PeakFitWindow()
  * Gets the approprite information for the peak fit from the entries
  * and then calls the peak fit function
  */
-void PeakFitCallback(GtkWidget *widget, gpointer *data)
-{
-  float a,b,c;
+void PeakFitCallback(GtkWidget *widget, gpointer *data) {
+  float a, b, c;
   int test;
   float minwidth;
   float maxwidth;
@@ -1287,13 +1252,13 @@ void PeakFitCallback(GtkWidget *widget, gpointer *data)
 
   abortflag = 0;
 
-  if ((sscanf(gtk_entry_get_text(GTK_ENTRY(peakfitentry1)),"%f",&a)) == 1) {
-    test++;
-  } 
-  if ((sscanf(gtk_entry_get_text(GTK_ENTRY(peakfitentry2)),"%f",&b)) == 1) {
+  if ((sscanf(gtk_entry_get_text(GTK_ENTRY(peakfitentry1)), "%f", &a)) == 1) {
     test++;
   }
-  if ((sscanf(gtk_entry_get_text(GTK_ENTRY(peakfitentry3)),"%f",&c)) == 1) {
+  if ((sscanf(gtk_entry_get_text(GTK_ENTRY(peakfitentry2)), "%f", &b)) == 1) {
+    test++;
+  }
+  if ((sscanf(gtk_entry_get_text(GTK_ENTRY(peakfitentry3)), "%f", &c)) == 1) {
     fitnessthresh = c;
     test++;
   }
@@ -1303,26 +1268,25 @@ void PeakFitCallback(GtkWidget *widget, gpointer *data)
     fitnessthresh = c;
     /* --- ok, let's get the the range for the autofit --- */
     for (i = 0; i < 3; i++)
-      if ((sscanf(gtk_entry_get_text(GTK_ENTRY(peakfitentrya[i])),"%f",&a)) == 1) {
-	peakfita[i] = a;
+      if ((sscanf(gtk_entry_get_text(GTK_ENTRY(peakfitentrya[i])), "%f", &a)) == 1) {
+        peakfita[i] = a;
       }
     for (i = 0; i < 3; i++)
-      if ((sscanf(gtk_entry_get_text(GTK_ENTRY(peakfitentryb[i])),"%f",&a)) == 1) {
-	peakfitb[i] = a;
+      if ((sscanf(gtk_entry_get_text(GTK_ENTRY(peakfitentryb[i])), "%f", &a)) == 1) {
+        peakfitb[i] = a;
       }
     for (i = 0; i < 3; i++)
-      if ((sscanf(gtk_entry_get_text(GTK_ENTRY(peakfitentryc[i])),"%f",&a)) == 1) {
-	peakfitc[i] = a;
+      if ((sscanf(gtk_entry_get_text(GTK_ENTRY(peakfitentryc[i])), "%f", &a)) == 1) {
+        peakfitc[i] = a;
       }
-    
 
     WriteMainText("Attempting Peak Fit.\n");
-    FindPeaks(minwidth,maxwidth);
-    sprintf(dummystr,"Found %d peaks\n",num_peaks);
+    FindPeaks(minwidth, maxwidth);
+    sprintf(dummystr, "Found %d peaks\n", num_peaks);
     WriteMainText(dummystr);
     if (num_peaks) {
-      MultipleGaussFit(minwidth,maxwidth);
-      AutoCal(minwidth,maxwidth);
+      MultipleGaussFit(minwidth, maxwidth);
+      AutoCal(minwidth, maxwidth);
       free(peak_locs);
       peak_locs = NULL;
       num_peaks = 0;
@@ -1330,8 +1294,7 @@ void PeakFitCallback(GtkWidget *widget, gpointer *data)
   }
 }
 
-void ClosePeakFitWindow(GtkWidget *widget,gpointer data)
-{
+void ClosePeakFitWindow(GtkWidget *widget, gpointer data) {
   int i;
   /* --- first destroy the entry widgets --- */
 
@@ -1355,8 +1318,7 @@ void ClosePeakFitWindow(GtkWidget *widget,gpointer data)
   widget = NULL;
 }
 
-void ClosePeakFitWindowCancel(GtkWidget *widget,gpointer data)
-{
+void ClosePeakFitWindowCancel(GtkWidget *widget, gpointer data) {
   int i;
   /* --- first destroy the entry widgets --- */
 
