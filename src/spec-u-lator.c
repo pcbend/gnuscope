@@ -129,7 +129,7 @@ void SpecULatorGo(GtkWidget *widget, gpointer *data) {
   histloc[output] = (int *)malloc(max_size * sizeof(int));
   histsize[output] = max_size;
   histid[output] = output;
-  sprintf(field2[output], spec_u_titles[output]);
+  snprintf(field2[output], 40, "%s", spec_u_titles[output]);
 
   for (i = 0; i < max_size; i++) {
     *(histloc[output] + i) = temphist[2][i];
@@ -176,7 +176,7 @@ void SpecULatorNormCallback(GtkWidget *widget, gpointer *data) {
  * Updates the new title in spec_u_titles from what is displayed
  */
 void SpecULatorTitleChanged(GtkWidget *widget, gpointer *data) {
-  sprintf(spec_u_titles[(int)data], gtk_entry_get_text(GTK_ENTRY(widget)));
+  snprintf(spec_u_titles[(int)data], sizeof(spec_u_titles[(int)data]), "%s", gtk_entry_get_text(GTK_ENTRY(widget)));
 }
 
 /* SpecULatorOutputCallback
@@ -203,7 +203,7 @@ void SpecULatorInitialize() {
     spec_u_toggle[i].subtract = 0;
     spec_u_toggle[i].norm = 1;
     spec_u_outputtoggle[i] = 0;
-    sprintf(spec_u_titles[i], field2[i]);
+    snprintf(spec_u_titles[i], sizeof(spec_u_titles[i]), "%s", field2[i]);
   }
 }
 

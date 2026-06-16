@@ -73,7 +73,7 @@ void ManipulateTitleCallback(GtkWidget *widget, gpointer *data) {
     /* --- kinda need to know if we have a spectrum we are supposed to title --- */
     g_return_if_fail((a > 0) && (a <= GetLastSpectrum() + 1));
     /* --- now we know that we are looking at a valid spectrum --- */
-    sprintf(field2[a - 1], gtk_entry_get_text(GTK_ENTRY(manipulatetitleentry2)));
+    snprintf(field2[a - 1], 40, "%s", gtk_entry_get_text(GTK_ENTRY(manipulatetitleentry2)));
     DisplayCurrentRange();
     DrawMarkers();
   }
@@ -493,15 +493,15 @@ void CompressSpectraEntry(GtkWidget *widget, GtkWidget *entry) {
         temphist[i] = tempsum;
       }
       newmemsize = sizeof(int) * newsize;
-      sprintf(tempfield1, field1[a]);
-      sprintf(tempfield2, field2[a]);
-      sprintf(tempfield3, field3[a]);
+      snprintf(tempfield1, sizeof(tempfield1), "%s", field1[a]);
+      snprintf(tempfield2, sizeof(tempfield2), "%s", field2[a]);
+      snprintf(tempfield3, sizeof(tempfield3), "%s", field3[a]);
       ObliterateHistogram(a);
       histloc[a] = (int *)malloc(newmemsize);
       histsize[a] = newsize;
-      sprintf(field1[a], tempfield1);
-      sprintf(field2[a], tempfield2);
-      sprintf(field3[a], tempfield3);
+      snprintf(field1[a], 40, "%s", tempfield1);
+      snprintf(field2[a], 40, "%s", tempfield2);
+      snprintf(field3[a], 40, "%s", tempfield3);
       for (i = 0; i < histsize[a]; i++)
         *(histloc[a] + i) = temphist[i];
       currentrange[0] = 0;
@@ -586,7 +586,7 @@ void ClearSpectraEntry(GtkWidget *widget, GtkWidget *entry) {
  * Interprets the Title dialog
  */
 void TitleSpectraEntry(GtkWidget *widget, GtkWidget *entry) {
-  sprintf(field2[spectra], gtk_entry_get_text(GTK_ENTRY(entry)));
+  snprintf(field2[spectra], 40, "%s", gtk_entry_get_text(GTK_ENTRY(entry)));
   DisplayCurrentRange();
   DrawMarkers();
 }

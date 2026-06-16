@@ -154,7 +154,7 @@ void ConfigFileHandler(FILE *infile) {
         if (sscanf(dummystr, "LineColor %d %s", &i, &dummystr2) == 2) {
           i--;
           if ((i >= 0) && (i < 10)) {
-            sprintf(colorstring[i], dummystr2);
+            snprintf(colorstring[i], sizeof(colorstring[i]), "%s", dummystr2);
           }
         }
       }

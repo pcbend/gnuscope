@@ -285,9 +285,9 @@ void Gainshift(int localspectrum, float oldconst, float oldlin, float oldquad, f
   }
 
   //--ddc 19jun09 get text fields...
-  sprintf(tempfield1, field1[localspectrum]);
-  sprintf(tempfield2, field2[localspectrum]);
-  sprintf(tempfield3, field3[localspectrum]);
+  snprintf(tempfield1, sizeof(tempfield1), "%s", field1[localspectrum]);
+  snprintf(tempfield2, sizeof(tempfield2), "%s", field2[localspectrum]);
+  snprintf(tempfield3, sizeof(tempfield3), "%s", field3[localspectrum]);
 
   ObliterateHistogram(localspectrum);
   histsize[localspectrum] = newchannels;
@@ -306,9 +306,9 @@ void Gainshift(int localspectrum, float oldconst, float oldlin, float oldquad, f
   calibration[localspectrum][1] = newcalib;
 
   //--ddc 19jun09 put the text fields back
-  sprintf(field1[localspectrum], tempfield1);
-  sprintf(field2[localspectrum], tempfield2);
-  sprintf(field3[localspectrum], tempfield3);
+  snprintf(field1[localspectrum], 40, "%s", tempfield1);
+  snprintf(field2[localspectrum], 40, "%s", tempfield2);
+  snprintf(field3[localspectrum], 40, "%s", tempfield3);
 
   currentrange[0] = 0;
   currentrange[1] = newchannels;

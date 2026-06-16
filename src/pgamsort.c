@@ -718,7 +718,7 @@ void PgamSortCallback(GtkWidget *widget, gpointer *data) {
       }
     }
     if (pgamsortoutputpairsqr) {
-      if (sprintf(pgampairfilename, gtk_entry_get_text(GTK_ENTRY(pgamentry13))) == 0) {
+      if (snprintf(pgampairfilename, sizeof(pgampairfilename), "%s", gtk_entry_get_text(GTK_ENTRY(pgamentry13))) == 0) {
         GetMessageDialog("Pair Information Required for Pair Square sort.");
         pgamsortoutputpairsqr = 0;
       }
@@ -1027,7 +1027,7 @@ void PgamReadMasterSetup(char *sFilename) {
           setupfiles[i].runs[0] = Min(tempint[0], tempint[1]);
           setupfiles[i].runs[1] = Max(tempint[0], tempint[1]);
           //	  printf("Is the error below this line?\n");
-          sprintf((setupfiles[i].filename), tempchar);
+          snprintf(setupfiles[i].filename, sizeof(setupfiles[i].filename), "%s", tempchar);
           sprintf(tempchar, "%d to %d uses %s\n", setupfiles[i].runs[0], setupfiles[i].runs[1],
                   setupfiles[i].filename);
           WriteMessageText(tempchar);
@@ -1340,7 +1340,7 @@ void PgamReadSetup(char *sFilename) {
         while (strncmp("#", dummystr, 1) == 0) {
           fgets(dummystr, 120, infile);
         }
-        sprintf(hpges[i].title, dummystr);
+        snprintf(hpges[i].title, sizeof(hpges[i].title), "%s", dummystr);
         printf("%s\n", hpges[i].title);
         fgets(dummystr, 120, infile);
         while (strncmp("#", dummystr, 1) == 0) {
@@ -1411,7 +1411,7 @@ void PgamReadSetup(char *sFilename) {
         while (strncmp("#", dummystr, 1) == 0) {
           fgets(dummystr, 120, infile);
         }
-        sprintf(telescopes[i].totaltitle, dummystr);
+        snprintf(telescopes[i].totaltitle, sizeof(telescopes[i].totaltitle), "%s", dummystr);
         printf("%s\n", telescopes[i].totaltitle);
         fgets(dummystr, 120, infile);
         while (strncmp("#", dummystr, 1) == 0) {
@@ -1537,7 +1537,7 @@ void PgamReadSetup(char *sFilename) {
         while (strncmp("#", dummystr, 1) == 0) {
           fgets(dummystr, 120, infile);
         }
-        sprintf(clovers[i].totaltitle, dummystr);
+        snprintf(clovers[i].totaltitle, sizeof(clovers[i].totaltitle), "%s", dummystr);
         printf("%s\n", clovers[i].totaltitle);
         /* --- now we need to know how many crystals are in this detector --- */
         /* --- and the virtual adc for the sum --- */
@@ -1599,7 +1599,7 @@ void PgamReadSetup(char *sFilename) {
         while (strncmp("#", dummystr, 1) == 0) {
           fgets(dummystr, 120, infile);
         }
-        sprintf(tacs[i].title, dummystr);
+        snprintf(tacs[i].title, sizeof(tacs[i].title), "%s", dummystr);
         printf("%s\n", tacs[i].title);
         fgets(dummystr, 120, infile);
         while (strncmp("#", dummystr, 1) == 0) {
@@ -2013,7 +2013,7 @@ void PgamSort() {
         big_data_info[j] = BigDataStructNew(edesize, edesize);
       }
       for (j = 0; j < most_telescopes; j++) {
-        sprintf(twodtitles[j + pgammax], telescopes[j].totaltitle);
+        snprintf(twodtitles[j + pgammax], sizeof(twodtitles[j + pgammax]), "%s", telescopes[j].totaltitle);
       }
       pgammax += most_telescopes;
     }
@@ -2295,17 +2295,17 @@ void PgamSort() {
     if ((pgamsortoutputhists) || (pgamsortoutputtac)) {
       for (k = 0; k < num_adcs; k++) {
         if (adc_map[hpges[k].adc] != -1) {
-          sprintf(field2[adc_map[hpges[k].adc]], hpges[k].title);
+          snprintf(field2[adc_map[hpges[k].adc]], 40, "%s", hpges[k].title);
         }
       }
       for (k = 0; k < num_telescopes; k++) {
         if (adc_map[telescopes[k].totaladc] != -1) {
-          sprintf(field2[adc_map[telescopes[k].totaladc]], telescopes[k].totaltitle);
+          snprintf(field2[adc_map[telescopes[k].totaladc]], 40, "%s", telescopes[k].totaltitle);
         }
       }
       for (k = 0; k < num_clovers; k++) {
         if (adc_map[clovers[k].totadc] != -1) {
-          sprintf(field2[adc_map[clovers[k].totadc]], clovers[k].totaltitle);
+          snprintf(field2[adc_map[clovers[k].totadc]], 40, "%s", clovers[k].totaltitle);
         }
       }
     }

@@ -741,7 +741,7 @@ void PgamSetTwodTitleEntry(GtkWidget *widget, GtkWidget *entry) {
   char dummystr[120];
   test = sscanf(gtk_entry_get_text(GTK_ENTRY(entry)), "%s", dummystr);
   if (test == 1) {
-    sprintf(twodtitles[pgam], gtk_entry_get_text(GTK_ENTRY(entry)));
+    snprintf(twodtitles[pgam], sizeof(twodtitles[pgam]), "%s", gtk_entry_get_text(GTK_ENTRY(entry)));
     TwodDisplayCurrentRange();
   }
 }
@@ -1741,7 +1741,7 @@ void WriteBig(char *sFilename) {
 
   /* --- first of all we want to either auto-detect the file type
      --- from the name, or add the .ede file extention --- */
-  sprintf(dummystr, sFilename);
+  snprintf(dummystr, sizeof(dummystr), "%s", sFilename);
   if (strstr(dummystr, ".big") != NULL) {
     filetype = BIG;
   } else {

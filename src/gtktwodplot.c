@@ -1840,7 +1840,7 @@ void gtk_twodplot_set_title(GtkTwodplot *twodplot, const char *title) {
   g_return_if_fail(twodplot != NULL);
   g_return_if_fail(GTK_IS_TWODPLOT(twodplot));
 
-  sprintf(twodplot->title, title);
+  snprintf(twodplot->title, sizeof(twodplot->title), "%s", title);
 }
 
 /* gtk_twodplot_set_x_calibration

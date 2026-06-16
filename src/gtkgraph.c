@@ -302,7 +302,7 @@ void gtk_graph_title(GtkGraph *graph, int linenum, const char *title) {
   g_return_if_fail(graph != NULL);
   g_return_if_fail(GTK_IS_GRAPH(graph));
   g_return_if_fail((linenum >= 0) && (linenum < graph->num_lines));
-  sprintf(graph->title[linenum], title);
+  snprintf(graph->title[linenum], 40, "%s", title);
   if ((linefeed = strchr(graph->title[linenum], '\n')) != NULL)
     *linefeed = 0;
 }

@@ -372,7 +372,7 @@ void CommandFileHandler(char *sFilename) {
               pgamsortoutputsqr = 0;
               pgamsortoutputpairsqr = 1;
               if (1 == sscanf(dummystr, "sort output pairsqr %s", dummystr2)) {
-                sprintf(pgampairfilename, dummystr2);
+                snprintf(pgampairfilename, sizeof(pgampairfilename), "%s", dummystr2);
               }
             }
           }
