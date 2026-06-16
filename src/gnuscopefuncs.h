@@ -216,7 +216,7 @@ void SetPgamEntry14(char *sFilename);
 int GetLastSpectrum();
 void DisplayCurrentRange();
 void DrawMarkers();
-void PgamClear2Dprompt(GtkWidget *text);
+void PgamClear2DPrompt(GtkWidget *text);
 
 //--ddc from peakfit.c
 void PeakFitWindow();
@@ -248,4 +248,4 @@ void ProjectFull(void);
 int getints(FILE *infile, int *array, int n);
 void ReadAutoMatrix(char *sFilename);
 GtkTextBuffer *mytextbuffer(GtkWidget *text);
-void PgamClear2Dprompt(GtkWidget *text);
+//void PgamClear2Dprompt(GtkWidget *text);

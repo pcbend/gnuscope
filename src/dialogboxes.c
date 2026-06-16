@@ -89,7 +89,7 @@ void PgamSetTwodTitlePrompt(GtkWidget *text);
 void PgamDisplaySelectionEntry(GtkWidget *widget, GtkWidget *entry);
 void PgamDisplaySelectionPrompt(GtkWidget *text);
 void PgamClear2DEntry(GtkWidget *widget, GtkWidget *entry);
-void PgamClear2Dprompt(GtkWidget *text);
+void PgamClear2DPrompt(GtkWidget *text);
 void PgamAdd2DEntry(GtkWidget *widget, GtkWidget *entry);
 void PgamAdd2DPrompt(GtkWidget *text);
 void PgamSubtract2DEntry(GtkWidget *widget, GtkWidget *entry);
@@ -449,7 +449,7 @@ void GetDialog(int type) {
       /* --- case of deleting a 2D histogram --- */
       //--ddc aug11    gtk_signal_connect(GTK_OBJECT(entry),"activate",
       g_signal_connect(GTK_OBJECT(entry), "activate", G_CALLBACK(PgamClear2DEntry), entry);
-      PgamClear2Dprompt(text);
+      PgamClear2DPrompt(text);
       break;
     case 36:
       /* --- case of adding 2 2D histograms --- */

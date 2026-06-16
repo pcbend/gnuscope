@@ -623,7 +623,7 @@ void PgamAdd2DEntry(GtkWidget *widget, GtkWidget *entry) {
  *
  * lists the 2D plots in memory, and asks the user which one they want to delete
  */
-void PgamClear2Dprompt(GtkWidget *text) {
+void PgamClear2DPrompt(GtkWidget *text) {
   char dummystr[120];
   int i;
   sprintf(dummystr, "Please select a spectrum to delete.\n");
